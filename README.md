@@ -12,25 +12,25 @@ The purpose of queue modeling lies in the simulation of the system before its ac
 
 ## Core terminology
 ### Delta t / Event Modeling
-Delta t modeling involves the use of the smallest possible time increment, updating the global system time during each iteration. Generators and processor handlers are invoked at each iteration, producing results and managing the progression of tasks. Tasks are generated if their next call time is less than the global time.
+`Delta t` modeling involves the use of the smallest possible time increment, updating the global system time during each iteration. `Generators` and `Processors` handlers are invoked at each iteration, producing results and managing the progression of tasks. System unit is invoked only if their next call calculated time is less than the global time.
 
-Event modeling operates independently of time and involves invoking all system units during each iteration to produce results. This approach often yields more accurate results compared to Delta t modeling.
+`Event` modeling operates independently of time and involves creating a priorities list of system events before next iteration and invoking corresponding system units by that list. This approach often yields more accurate results compared to `Delta t` modeling.
 
 ### Information Source
 
-An Information Source, or Generator, denotes a point in the system where units are introduced or produced. The generation of new tasks or requests follows distribution laws, constant or random time increments, or condition-based criteria. Information Sources may have constraints related to the type or quantity of tasks produced.
+An `Information Source`, or `Generator`, denotes a point in the system where units are introduced or produced. The generation of new `Tasks` or `Requests` follows distribution laws, constant or random time increments, or condition-based criteria. `Information Sources` may have constraints related to the type or quantity of `Task` produced.
 
 ### Queue
 
-A Queue serves as the repository for all requests within the system. It is commonly implemented using a queue data structure, adhering to the "First In, First Out" (FIFO) principle. When processors become available, requests at the front of the queue progress to the processing stage. The queue may be finite, necessitating the deletion of incoming requests if directed to an already full queue.
+A `Queue` serves as the repository for all requests within the system. It is commonly implemented using a queue data structure, adhering to the "First In, First Out" (FIFO) principle. When `Processors` become available, `Requests` at the front of the `Queue` progress to the processing stage. The `Queue` may be finite, necessitating the deletion of incoming requests if directed to an already full `Queue`.
 
 ### Processor
 
-The Processor constitutes the central component of the Q-system, responsible for task processing. Similar to Generators, processing times may be constant, conditional, or follow distribution laws. Following processing, tasks are timestamped and either routed to a finished storage or returned to the queue, contingent on predefined criteria.
+The `Processor` constitutes the central component of the Q-system, responsible for task processing. Similar to `Generators`, processing times may be constant, conditional, or follow distribution laws. Following processing, `Tasks` are timestamped and either routed to a finished storage or returned to the queue, contingent on predefined criteria.
 
-### User Request / Task
+### Request / Task
 
-Tasks, or User Requests, serve to encapsulate information about generation and processing timestamps, return occurrences, status, and type. This comprehensive data enables post-simulation analysis to elucidate the flow of each request throughout the system.
+`Tasks`, or `Requests`, serve to encapsulate information about generation and processing timestamps, return occurrences, status, and type. This comprehensive data enables post-simulation analysis to elucidate the flow of each request throughout the system.
 
 ## Example of Q-system
 ![image](https://github.com/Tulenien/QueueingModellingDSL/blob/master/queue_model_example.png)
