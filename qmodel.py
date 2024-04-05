@@ -32,20 +32,20 @@ class RandomGenerator(ABC):
         pass
         
 class UniformDistribution(RandomGenerator):
-    def generate_double(self):
+    def generate_double(self): #generates
         random_value = random.random()
         result = self.a + (self.b - self.a) * random_value
         return result
         
 class NormalDistribution(RandomGenerator):
-    def generate_double():
+    def generate_double(self):
         result = 0.0
         for i in range(12):
             random_value = random.random()
-            result += random_value;
-        }
+            result += random_value
+
         result -= 6
-        return abs(result * self.a * self.b);
+        return abs(result * self.a * self.b)
         
 class InformationSource:
     def __init__(self, random_generator, number, name_template):
@@ -57,9 +57,9 @@ class InformationSource:
         self.requests_name_template = name_template
         
     def generate_request(self):
-        requests_generated += 1
+        self.requests_generated += 1
         name = self.requests_name_template + str(self.requests_generated)
-        request = Request(name, current_time, "generated")
+        request = Request(name, self.current_time, "generated")
         return request
         
     def get_current_time(self):
@@ -69,11 +69,11 @@ class InformationSource:
         return self.previous_time
         
     def get_requests_generated(self):
-        return requests_generated
+        return self.requests_generated
         
     def generate_time(self):
         self.previous_time = self.current_time
-        self.current_time += generator.generate_double()
+        self.current_time += self.generator.generate_double()
         
     def get_id(self):
         return id
@@ -93,14 +93,14 @@ class ProcessingUnit:
     def process_request(self, request):
         self.active = True
         request.set_start_processing_time(self.current_time)
-        self.current_time += generator.generate_double()
+        self.current_time += self.generator.generate_double()
         request.set_status("processed")
-        request.set_finish_processing_time(current_time)
-        finished_count += 1
+        request.set_finish_processing_time(self.current_time)
+        self.finished_count += 1
         if self.return_percent > 0:
             percent = random.randrange(100)
             if percent < self.return_percent:
-                return_count += 1
+                self.return_count += 1
                 return True
         return False
         
@@ -134,8 +134,8 @@ class QSystem:
     DELTA = 1e-5
     def __init__(self):
         self.system_modules = dict()
-        self.system_modules[INF_SOURCE] = []
-        self.system_modules[PROCESSOR] = []
+        self.system_modules[QSystem.INF_SOURCE] = []
+        self.system_modules[QSystem.PROCESSOR] = []
         self.time_constraint = 0.0
         self.requests_constraint = 0
         self.isTimed = False
@@ -152,24 +152,24 @@ class QSystem:
             elif c.__class__.__name__ == "SetRequestsConstraint":
                 self.requests_constraint = c.number
             elif c.__class__.__name__ == "GenerateCommand":
-                generator = create_generator(c.distribution)
-                inf_source = InformationSource(generator, inf_source_seq, c.template)
-                self.system_modules[INF_SOURCE].append(inf_source)
-                inf_source_seq += 1
+                generator = self.create_generator(c.distribution)
+                inf_source = InformationSource(generator, self.inf_source_seq, c.template)
+                self.system_modules[QSystem.INF_SOURCE].append(inf_source)
+                self.inf_source_seq += 1
             elif c.__class__.__name__ == "ProcessCommand":
-                generator = create_generator(c.distribution)
-                processor = ProcessingUnit(generator, processors_seq, c.percent, c.connected)
-                processors_seq += 1
+                generator = self.create_generator(c.distribution)
+                processor = ProcessingUnit(generator, self.processors_seq, c.percent, c.connected)
+                self.processors_seq += 1
                 flag = False
                 for source in c.connected:
                     if flag:
                         break
-                    for id in self.system_modules[INF_SOURCE]:
+                    for id in self.system_modules[QSystem.INF_SOURCE]:
                         if source.get_id() == id:
                             processor.connect_inf_source(source)
                             flag = True
                             break
-                self.system_modules[PROCESSOR].append(processor)
+                self.system_modules[QSystem.PROCESSOR].append(processor)
             
     def create_generator(self, type):
         if (type == "normal"):
