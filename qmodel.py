@@ -74,6 +74,7 @@ class InformationSource:
     def generate_time(self):
         self.previous_time = self.current_time
         self.current_time += self.generator.generate_double()
+        return self.current_time
         
     def get_id(self):
         return id
@@ -101,8 +102,8 @@ class ProcessingUnit:
             percent = random.randrange(100)
             if percent < self.return_percent:
                 self.return_count += 1
-                return True
-        return False
+                return False
+        return True
         
     def is_active(self):
         return self.active
@@ -177,6 +178,49 @@ class QSystem:
         elif(type == "uniform"):
             generator = UniformDistribution()
         return type
+
+    def simulate(self):
+        requests = [] #memory for now
+
+        if self.isTimed:
+            while self.global_time < self.time_constraint:
+                self.global_time += QSystem.DELTA
+                for source in self.system_modules[QSystem.INF_SOURCE]:
+                     if self.global_time > source.generate_time():
+                         requests.append(source.generate_request())
+
+                for processor in self.system_modules[QSystem.PROCESSOR]:
+                    if requests:
+                        if processor.is_active() and  self.global_time > processor.get_current_time():
+                            processor.set_active(False)
+                        if not processor.is_active():
+                            processor.set_active(True)
+                            request = requests.pop()
+                            is_processed = processor.process_request(request)
+
+                            if not is_processed:
+                                requests.append(request)
+
+        else:
+            precessed_requests = 0
+            while precessed_requests < self.requests_constraint:
+                self.global_time += QSystem.DELTA
+                for source in self.system_modules[QSystem.INF_SOURCE]:
+                    if self.global_time > source.generate_time():
+                        requests.append(source.generate_request())
+
+                for processor in self.system_modules[QSystem.PROCESSOR]:
+                    if requests:
+                        if processor.is_active() and self.global_time > processor.get_current_time():
+                            processor.set_active(False)
+                        if not processor.is_active():
+                            processor.set_active(True)
+                            request = requests.pop()
+                            is_processed = processor.process_request(request)
+                            precessed_requests += 1
+
+                            if not is_processed:
+                                requests.append(request)
 
 
 def main(debug=False):
