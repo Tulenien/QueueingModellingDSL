@@ -128,11 +128,51 @@ class ProcessingUnit:
     
     def get_id(self):
         return id
+    
+class Statistics:
+    def Statistics(self, delta):
+        self.generators = []
+        self.processors = []
+
+        self.requests_generated = []
+        self.generation_time = []
+
+        self.proccessed_count = []
+        self.returned_count = []
+        self.processing_time = []
+
+        self.current_time = 0.0
+        self.delta = delta
+
+    def add_generator(self, generator):
+        self.generators.append(generator)
+
+    def add_processor(self, processor):
+        self.processors.append(processor)
+
+    def gather_stats(self, current_time):
+        for source in self.generators:
+            temp_generated_number += source.get_requests_generated()
+        self.requests_generated.append(temp_generated_number)
+        self.generation_time.append(current_time)
+
+        for proc in self.processors:
+            temp_processed_count += proc.get_finished_count()
+            temp_returned_count += proc.get_returned_count()
+        self.proccessed_count.append(temp_processed_count)
+        self.returned_count.append(temp_returned_count)
+        self.processing_time.append(current_time)
+
+        self.current_time += self.delta
+
+    def get_current_time(self):
+        return self.current_time
 
 class QSystem:
     INF_SOURCE = "INF_SOURCE"
     PROCESSOR = "PROCESSOR"
     DELTA = 1e-5
+    STAT_DELTA= 1e-3
     def __init__(self):
         self.system_modules = dict()
         self.system_modules[QSystem.INF_SOURCE] = []
@@ -143,6 +183,7 @@ class QSystem:
         self.global_time = 0.0
         self.inf_source_seq = 0
         self.processors_seq = 0
+        self.statistics = Statistics(QSystem.STAT_DELTA)
         
     def interpret(self, model):
         for c in model.commands:
@@ -170,18 +211,30 @@ class QSystem:
                             flag = True
                             break
                 self.system_modules[QSystem.PROCESSOR].append(processor)
+
+            elif c.__class__.__name__ == "Statistics":
+                self.attach_statistics(c.type,c.id)
+                
+            
             
     def create_generator(self, type):
         if (type == "normal"):
             generator = NormalDistribution()
         elif(type == "uniform"):
             generator = UniformDistribution()
-        return type
+        return generator
+
+    def attach_statistics(self, type, id):
+        if (type == "generator"):
+            self.statistics.add_generator(self.system_modules[QSystem.INF_SOURCE][id])
+        elif (type == "processor"):
+            self.statistics.add_processor(self.system_modules[QSystem.PROCESSOR][id])
 
     def simulate(self):
         requests = []
 
         if self.isTimed:
+            self.statistics.gather_stats()
             while self.global_time < self.time_constraint:
                 self.global_time += QSystem.DELTA
                 for source in self.system_modules[QSystem.INF_SOURCE]:
@@ -200,9 +253,12 @@ class QSystem:
 
                             if not is_processed:
                                 requests.append(request)
+                if self.statistics.get_current_time() > self.global_time:
+                    self.statistics.gather_stats()
 
         else:
             precessed_requests = 0
+            self.statistics.gather_stats()
             while precessed_requests < self.requests_constraint:
                 self.global_time += QSystem.DELTA
                 for source in self.system_modules[QSystem.INF_SOURCE]:
@@ -221,6 +277,8 @@ class QSystem:
 
                             if not is_processed:
                                 requests.append(request)
+                if self.statistics.get_current_time() > self.global_time:
+                    self.statistics.gather_stats()                                
 
 
 def main(debug=False):
