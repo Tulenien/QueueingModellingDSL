@@ -228,6 +228,7 @@ class QSystem:
             elif c.__class__.__name__ == "Statistics":
                 self.attach_statistics(c.type, c.id)
 
+
     def create_generator(self, type, a, b):
         if (type == "normal"):
             generator = NormalDistribution(a, b)
@@ -245,7 +246,7 @@ class QSystem:
         requests = []
 
         if self.isTimed:
-            self.statistics.gather_stats()
+            self.statistics.gather_stats(self.global_time)
             while self.global_time < self.time_constraint:
                 self.global_time += QSystem.DELTA
                 for source in self.system_modules[QSystem.INF_SOURCE]:
@@ -265,12 +266,12 @@ class QSystem:
                             if not is_processed:
                                 requests.append(request)
                 if self.statistics.get_current_time() > self.global_time:
-                    self.statistics.gather_stats()
+                    self.statistics.gather_stats(self.global_time)
 
         else:
-            precessed_requests = 0
-            self.statistics.gather_stats()
-            while precessed_requests < self.requests_constraint:
+            processed_requests = 0
+            self.statistics.gather_stats(self.global_time)
+            while processed_requests < self.requests_constraint:
                 self.global_time += QSystem.DELTA
                 for source in self.system_modules[QSystem.INF_SOURCE]:
                     if self.global_time > source.generate_time():
@@ -284,12 +285,13 @@ class QSystem:
                             processor.set_active(True)
                             request = requests.pop()
                             is_processed = processor.process_request(request)
-                            precessed_requests += 1
+                            processed_requests += 1
 
                             if not is_processed:
                                 requests.append(request)
                 if self.statistics.get_current_time() > self.global_time:
-                    self.statistics.gather_stats()
+                    self.statistics.gather_stats(self.global_time)
+        print("simulation finished!")
 
 
 def main(debug=False):
@@ -303,6 +305,7 @@ def main(debug=False):
 
     system = QSystem()
     system.interpret(qsystem_model)
+    system.simulate()
 
 
 if __name__ == "__main__":
