@@ -35,7 +35,7 @@ class RandomGenerator(ABC):
 
 
 class UniformDistribution(RandomGenerator):
-    def generate_double(self):  # generates
+    def generate_double(self):
         random_value = random.random()
         result = self.a + (self.b - self.a) * random_value
         return result
@@ -201,7 +201,6 @@ class QSystem:
         self.statistics = Statistics(QSystem.STAT_DELTA)
 
     def interpret(self, model):
-        # model is an instance of Program
         for c in model.commands:
             if c.__class__.__name__ == "SetTimeConstraint":
                 self.time_constraint = c.number
@@ -243,7 +242,7 @@ class QSystem:
             self.statistics.add_processor(self.system_modules[QSystem.PROCESSOR][id])
 
     def simulate(self):
-        requests = []  # memory for now
+        requests = []
 
         if self.isTimed:
             self.statistics.gather_stats()
@@ -255,9 +254,10 @@ class QSystem:
 
                 for processor in self.system_modules[QSystem.PROCESSOR]:
                     if requests:
-                        if processor.is_active() and self.global_time > processor.get_current_time():
+                        if processor.is_active() and self.global_time < processor.get_current_time():
                             processor.set_active(False)
                         if not processor.is_active():
+                            processor.set_current_time(self.global_time)
                             processor.set_active(True)
                             request = requests.pop()
                             is_processed = processor.process_request(request)
