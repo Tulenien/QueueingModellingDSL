@@ -32,7 +32,7 @@ class RandomGenerator(ABC):
         pass
         
 class UniformDistribution(RandomGenerator):
-    def generate_double(self): #generates
+    def generate_double(self):
         random_value = random.random()
         result = self.a + (self.b - self.a) * random_value
         return result
@@ -145,19 +145,18 @@ class QSystem:
         self.processors_seq = 0
         
     def interpret(self, model):
-        # model is an instance of Program
         for c in model.commands:
             if c.__class__.__name__ == "SetTimeConstraint":
                 self.time_constraint = c.number
                 self.isTimed = True
             elif c.__class__.__name__ == "SetRequestsConstraint":
                 self.requests_constraint = c.number
-            elif c.__class__.__name__ == "GenerateCommand":
+            elif c.__class__.__name__ == "Generator":
                 generator = self.create_generator(c.distribution)
                 inf_source = InformationSource(generator, self.inf_source_seq, c.template)
                 self.system_modules[QSystem.INF_SOURCE].append(inf_source)
                 self.inf_source_seq += 1
-            elif c.__class__.__name__ == "ProcessCommand":
+            elif c.__class__.__name__ == "Processor":
                 generator = self.create_generator(c.distribution)
                 processor = ProcessingUnit(generator, self.processors_seq, c.percent, c.connected)
                 self.processors_seq += 1
@@ -180,7 +179,7 @@ class QSystem:
         return type
 
     def simulate(self):
-        requests = [] #memory for now
+        requests = []
 
         if self.isTimed:
             while self.global_time < self.time_constraint:
@@ -191,9 +190,10 @@ class QSystem:
 
                 for processor in self.system_modules[QSystem.PROCESSOR]:
                     if requests:
-                        if processor.is_active() and  self.global_time > processor.get_current_time():
+                        if processor.is_active() and self.global_time < processor.get_current_time():
                             processor.set_active(False)
                         if not processor.is_active():
+                            processor.set_current_time(self.global_time)
                             processor.set_active(True)
                             request = requests.pop()
                             is_processed = processor.process_request(request)
