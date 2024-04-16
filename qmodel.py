@@ -298,11 +298,6 @@ def main(debug=False):
     robot_mm = metamodel_from_file(join(this_folder, 'qsystem.tx'), debug=False)
     metamodel_export(robot_mm, join(this_folder, 'qsystem_meta.dot'))
 
-    # Example for adding commands
-    # Use later for statistics generation
-    # Register object processor for MoveCommand
-    # robot_mm.register_obj_processors({'MoveCommand': move_command_processor})
-
     qsystem_model = robot_mm.model_from_file(join(this_folder, 'program.qs'))
     model_export(qsystem_model, join(this_folder, 'program.dot'))
 
