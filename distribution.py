@@ -14,6 +14,8 @@ class RandomGenerator(ABC):
             generator = NormalDistribution(a, b)
         elif (type == "uniform"):
             generator = UniformDistribution(a, b)
+        else:
+            generator = Incremental(value)
         return generator
 
     @abstractmethod
@@ -37,3 +39,7 @@ class NormalDistribution(RandomGenerator):
 
         result -= 6
         return abs(result * self.a * self.b)
+
+class Incremental(RandomGenerator):
+    def generate_double(self):
+        return self.value
