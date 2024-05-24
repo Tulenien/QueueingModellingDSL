@@ -1,0 +1,28 @@
+import tkinter as tk
+
+def on_entry_focus_out(event, entry, list_for_values):
+    value = entry.get()
+    list_for_values.append(value)
+
+def make_text_field(frame, width, padding, list_for_values):
+    text_field = tk.Entry(frame, relief="sunken", width=width, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+    text_field.pack(pady=padding)
+    text_field.bind("<FocusOut>", lambda event: on_entry_focus_out(event, text_field, list_for_values))
+
+
+def make_frame(root, list_for_values):
+    frame = tk.Frame(root, width=800, height=500, bg="#ccddf3")
+    frame.pack(pady=10)  # Adding some padding to push the frame down
+
+    label = tk.Label(frame, text="2. NAME PROCESSORS", bg="#ccddf3", fg="#193d6c", font = ('Times', 16, 'bold'))
+    label.pack(pady=20, fill=tk.BOTH, expand=True) #center label in frame
+
+    frame_for_text_fields = tk.Frame(frame, width=800, height=500, bg="#ccddf3")
+    frame_for_text_fields.pack()  # Adding some padding to push the frame down
+    make_text_field(frame_for_text_fields, 30, 10, list_for_values)
+
+    button = tk.Button(frame, text="ADD NEXT", foreground='#193d6c', background='#b7c6da', relief='raised', font=('Times', 12, 'bold'),  command=lambda:make_text_field(frame_for_text_fields, 30, 10, list_for_values))
+    button.pack(pady=20)
+
+    return frame
+
