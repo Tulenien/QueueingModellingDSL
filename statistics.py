@@ -6,7 +6,7 @@ class Statistics:
         self.requests_generated = []
         self.generation_time = []
 
-        self.proccessed_count = []
+        self.processed_count = []
         self.returned_count = []
         self.processing_time = []
 
@@ -30,8 +30,8 @@ class Statistics:
 
         for proc in self.processors:
             temp_processed_count += proc.get_finished_count()
-            temp_returned_count += proc.get_returned_count()
-        self.proccessed_count.append(temp_processed_count)
+            temp_returned_count += proc.get_return_count()
+        self.processed_count.append(temp_processed_count)
         self.returned_count.append(temp_returned_count)
         self.processing_time.append(current_time)
 
@@ -39,4 +39,7 @@ class Statistics:
 
     def get_current_time(self):
         return self.current_time
+
+    def get_processed_requests(self):
+        return self.processed_count
 

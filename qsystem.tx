@@ -8,8 +8,14 @@ Program:
 ;
 
 Command:
-  SetTimeConstraint | SetRequestConstraint | Generator | Processor | Statistics
+  SetTimeConstraint | SetRequestConstraint | Generator | Processor | Statistics | Connect
 ;
+
+Connection:
+  other=STRING
+
+Connect:
+  'Connect' this=STRING connection*=Connection
 
 SetTimeConstraint:
   'SetTimeConstraint' number=INT
@@ -20,11 +26,11 @@ SetRequestConstraint:
 ;
 
 Generator:
-  'Generator' distribution=Distribution a=INT b=INT template=STRING
+  'Generator' distribution=Distribution b=INT template=STRING
 ;
 
 Processor:
-  'Processor' distribution=Distribution a=INT b=INT percent=INT connected*=STRING
+  'Processor' distribution=Distribution template=STRING
 ;
 
 Statistics:
@@ -33,11 +39,11 @@ Statistics:
 
 
 Distribution:
-  "normal"|"uniform"
+  "normal" a=FLOAT b=FLOAT | "uniform" a=INT b=INT | "increment" a=INT
 ;
 
 Modules:
-  "generator"|"processor"
+  "generator" | "processor"
 ;
 
 // Special rule for comments.

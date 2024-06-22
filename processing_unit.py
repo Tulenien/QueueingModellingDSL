@@ -1,5 +1,6 @@
 class ProcessingUnit:
-    def __init__(self, generator, number, return_percent):
+    def __init__(self, generator, number, return_percent, name):
+        self.name = name
         self.id = number
         self.active = False
         self.return_percent = return_percent
@@ -23,6 +24,9 @@ class ProcessingUnit:
                 self.return_count += 1
                 return False
         return True
+
+    def get_name(self):
+        return self.name
 
     def is_active(self):
         return self.active

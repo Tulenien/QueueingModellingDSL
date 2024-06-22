@@ -1,7 +1,6 @@
 begin
  SetTimeConstraint 1
- Generator normal 1 10 "A"
- Generator uniform 2 5 "B"
- Processor normal 3 7 0 "A" "B"
- Statistics generator 0
+ Generator uniform 1 10 "A"
+ Processor increment 2 "B"
+ Connect "A" "B"
 end

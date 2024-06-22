@@ -1,45 +1,38 @@
 import random
-from abc import ABC, abstractmethod
 
-class RandomGenerator(ABC):
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
+class RandomGenerator():
+    def __init__(func, *args):
+        self.generative_function = func
+        self.args = args
 
-    def __init__(self, value):
-        self.value = value
-        
-    def create_generator(type, a, b):
-        if (type == "normal"):
-            generator = NormalDistribution(a, b)
-        elif (type == "uniform"):
-            generator = UniformDistribution(a, b)
-        else:
-            generator = Incremental(value)
-        return generator
-
-    @abstractmethod
     def generate_double(self):
-        pass
+        return self.func(*self.args)
 
-
-class UniformDistribution(RandomGenerator):
-    def generate_double(self):
+class Distributions:
+    def uniform(a, b):
         random_value = random.random()
-        result = self.a + (self.b - self.a) * random_value
+        result = a + (b - a) * random_value
         return result
 
-
-class NormalDistribution(RandomGenerator):
-    def generate_double(self):
+    def normal(a, b):
         result = 0.0
         for i in range(12):
             random_value = random.random()
             result += random_value
-
         result -= 6
-        return abs(result * self.a * self.b)
+        return abs(result * a * b)
+        
+    def increment(value):
+        return value
 
-class Incremental(RandomGenerator):
-    def generate_double(self):
-        return self.value
+    distribution_dict = {
+        'uniform' :uniform,
+        'normal' : normal,
+        'increment' : increment
+    }
+
+    def get_distribution(name):
+        for key, value in distribution_dict:
+            if (key == name):
+                return value
+        return increment
