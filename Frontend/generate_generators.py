@@ -2,7 +2,7 @@ import tkinter as tk
 
 def on_entry_focus_out(event, entry, list_for_values, frame_to_focus):
     value = entry.get()
-    list_for_values.append(value)
+    list_for_values.add_information_source() #TODO: add generators into list_for_values which is qsytem
     frame_to_focus.focus()
 
 def make_text_field(frame, width, padding, list_for_values):
@@ -11,7 +11,7 @@ def make_text_field(frame, width, padding, list_for_values):
     text_field.bind("<Return>", lambda event: on_entry_focus_out(event, text_field, list_for_values, frame))
 
 
-def make_frame(root, list_for_values):
+def make_frame(root, list_for_values): #list_for_values is qsystem
     frame = tk.Frame(root, width=800, height=500, bg="#ccddf3")
     frame.pack(pady=10)  # Adding some padding to push the frame down
 

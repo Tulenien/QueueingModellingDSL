@@ -7,6 +7,9 @@ import generate_generators_settings
 import generate_processors_settings
 import generate_generator_statistics
 import generate_processor_statistics
+from qsystem import QSystem
+
+qsystem = QSystem()
 
 all_generators = [] #used for the first page to collect names of generators
 all_processors = [] #used for the second page to collect names of processors
@@ -52,7 +55,7 @@ def destroy_generate_generators_frame(frame, root):
 
 
 def call_second_page(root):
-    gp_frame = generate_processors.make_frame(root, all_processors)
+    gp_frame = generate_processors.make_frame(root, qsystem) #all_processors
     button = tk.Button(gp_frame, text="NEXT PAGE",
                        command=lambda: destroy_generate_processors_frame(gp_frame, root), foreground='#b7c6da',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
@@ -145,6 +148,8 @@ def on_window_close(root):
     root.unbind("<Destroy>")
 
 
+
+
 if __name__ == "__main__":
     # root window
     root = tk.Tk()
@@ -153,7 +158,7 @@ if __name__ == "__main__":
     root.resizable(False, False)
 
     #first window - generate generators
-    gg_frame = generate_generators.make_frame(root, all_generators)
+    gg_frame = generate_generators.make_frame(root, qsystem) #all_generators TODO: qsystem
     button = tk.Button(gg_frame, text="NEXT PAGE",
                        command=lambda: destroy_generate_generators_frame(gg_frame, root), foreground='#b7c6da',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))

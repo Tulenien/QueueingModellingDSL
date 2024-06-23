@@ -2,7 +2,7 @@ import tkinter as tk
 
 def on_entry_focus_out(event, entry, list_for_values, frame_to_focus):
     value = entry.get()
-    list_for_values.append(value)
+    list_for_values.append(value) #TODO ADD INTO LIST OF VALUES WHICH QSYTEM ADD PROCESSORS
     frame_to_focus.focus()
 
 def make_text_field(frame, width, padding, list_for_values):
@@ -15,6 +15,9 @@ def make_frame(root, list_for_values):
     frame = tk.Frame(root, width=800, height=500, bg="#ccddf3")
     frame.pack(pady=10)  # Adding some padding to push the frame down
 
+    #TODO: ADD MULTIPLE CHOICE DISTRIBUTION NAME
+    #DISTRIBUTIONS.DISTRIBUTION_DICT KEYS
+
     label = tk.Label(frame, text="2. NAME PROCESSORS", bg="#ccddf3", fg="#193d6c", font = ('Times', 16, 'bold'))
     label.pack(pady=20, fill=tk.BOTH, expand=True) #center label in frame
 
@@ -26,4 +29,5 @@ def make_frame(root, list_for_values):
     button.pack(pady=20)
 
     return frame
+
 
