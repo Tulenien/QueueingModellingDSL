@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-def on_entry_time_to_spend(event, entry, generator_settings):
+def on_entry_time_to_spend(event, entry, generator_settings, frame_to_focus):
     value = entry.get()
     generator_settings["time_to_spend"] = value
+    frame_to_focus.focus()
 
 
 def make_text_field_time_to_spend(frame, generator_settings):
@@ -12,7 +13,7 @@ def make_text_field_time_to_spend(frame, generator_settings):
 
     text_field = tk.Entry(frame, relief="sunken", width=30, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=15)
-    text_field.bind("<FocusOut>", lambda event: on_entry_time_to_spend(event, text_field, generator_settings))
+    text_field.bind("<Return>", lambda event: on_entry_time_to_spend(event, text_field, generator_settings, frame))
     return label, text_field
 
 

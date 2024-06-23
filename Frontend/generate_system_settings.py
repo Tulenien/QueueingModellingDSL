@@ -23,9 +23,10 @@ def destroy_text_field_and_label(frame, frame_path, system_settings):
     target.pack_forget()
     frame.unbind("<Destroy>")
 
-def on_entry_focus_out_small_number(event, entry, system_settings):
+def on_entry_focus_out_small_number(event, entry, system_settings, frame_to_focus):
     value = entry.get()
     system_settings["small_number_in_ms"] = value
+    frame_to_focus.focus()
 
 def make_text_field_to_input_small_number(frame, system_settings):
     label = tk.Label(frame, text="Input small number", bg="#ccddf3", fg="#193d6c", font=('Times', 14, 'bold'))
@@ -33,12 +34,13 @@ def make_text_field_to_input_small_number(frame, system_settings):
 
     text_field = tk.Entry(frame, relief="sunken", width=30, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=15)
-    text_field.bind("<FocusOut>", lambda event: on_entry_focus_out_small_number(event, text_field, system_settings))
+    text_field.bind("<Return>", lambda event: on_entry_focus_out_small_number(event, text_field, system_settings, frame))
     return label, text_field
 
-def on_entry_focus_out_time(event, entry, system_settings):
+def on_entry_focus_out_time(event, entry, system_settings, frame_to_focus):
     value = entry.get()
     system_settings["time"] = value
+    frame_to_focus.focus()
 
 def make_text_field_to_input_time(frame, system_settings):
     label = tk.Label(frame, text="Input time", bg="#ccddf3", fg="#193d6c", font=('Times', 14, 'bold'))
@@ -46,13 +48,14 @@ def make_text_field_to_input_time(frame, system_settings):
 
     text_field = tk.Entry(frame, relief="sunken", width=30, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=15)
-    text_field.bind("<FocusOut>", lambda event: on_entry_focus_out_time(event, text_field, system_settings))
+    text_field.bind("<Return>", lambda event: on_entry_focus_out_time(event, text_field, system_settings, frame))
     return label, text_field
 
 
-def on_entry_focus_out_number_of_events(event, entry, system_settings):
+def on_entry_focus_out_number_of_events(event, entry, system_settings, frame_to_focus):
     value = entry.get()
     system_settings["number_of_event"] = value
+    frame_to_focus.focus()
 
 def make_text_field_to_input_number_of_events(frame, system_settings):
     label = tk.Label(frame, text="Input number of events", bg="#ccddf3", fg="#193d6c", font=('Times', 14, 'bold'))
@@ -60,7 +63,7 @@ def make_text_field_to_input_number_of_events(frame, system_settings):
 
     text_field = tk.Entry(frame, relief="sunken", width=30, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=15)
-    text_field.bind("<FocusOut>", lambda event: on_entry_focus_out_number_of_events(event, text_field, system_settings))
+    text_field.bind("<Return>", lambda event: on_entry_focus_out_number_of_events(event, text_field, system_settings, frame))
     return label, text_field
 
 

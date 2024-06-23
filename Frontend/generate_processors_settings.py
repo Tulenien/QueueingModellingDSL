@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-def on_entry_time_to_spend(event, entry, processors_settings):
+def on_entry_time_to_spend(event, entry, processors_settings, frame_to_focus):
     value = entry.get()
     processors_settings["time_to_spend"] = value
+    frame_to_focus.focus()
 
 
 def make_text_field_time_to_spend(frame, processors_settings):
@@ -12,7 +13,7 @@ def make_text_field_time_to_spend(frame, processors_settings):
 
     text_field = tk.Entry(frame, relief="sunken", width=30, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=15)
-    text_field.bind("<FocusOut>", lambda event: on_entry_time_to_spend(event, text_field, processors_settings))
+    text_field.bind("<Return>", lambda event: on_entry_time_to_spend(event, text_field, processors_settings, frame))
     return label, text_field
 
 
@@ -34,9 +35,10 @@ def make_combobox(frame, processors_settings, options):
     combobox.bind("<<ComboboxSelected>>", lambda event: on_combobox_select(event, combobox, frame, processors_settings))
 
 
-def on_entry_memory_capacity(event, entry, processors_settings):
+def on_entry_memory_capacity(event, entry, processors_settings, frame_to_focus):
     value = entry.get()
     processors_settings["memory_capacity"] = value
+    frame_to_focus.focus()
 
 
 def make_text_field_memory_capacity(frame, processors_settings):
@@ -45,7 +47,7 @@ def make_text_field_memory_capacity(frame, processors_settings):
 
     text_field = tk.Entry(frame, relief="sunken", width=30, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=15)
-    text_field.bind("<FocusOut>", lambda event: on_entry_memory_capacity(event, text_field, processors_settings))
+    text_field.bind("<Return>", lambda event: on_entry_memory_capacity(event, text_field, processors_settings, frame))
     return label, text_field
 
 
