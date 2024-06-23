@@ -11,7 +11,7 @@ class QSystem:
     STAT_DELTA = 1e-3
 
     def __init__(self):
-        self.reset()
+        self.hard_reset()
 
     def hard_reset(self):
         self.system_modules = dict()
@@ -27,29 +27,14 @@ class QSystem:
         self.statistics = Statistics(QSystem.STAT_DELTA)
 
     def add_information_source(self, generator, name="gen"):
-        inf_source = InformationSource(generator, self.inf_source_seq, name + self.inf_source_seq)
+        inf_source = InformationSource(generator, self.inf_source_seq, name + str(self.inf_source_seq))
         self.inf_source_seq += 1
         self.system_modules[QSystem.INF_SOURCE].append(inf_source)
     
     def add_processing_unit(self, generator, name = "proc"):
-        proc_unit = ProcessingUnit(generator, self.processors_seq, name + self.processors_seq)
+        proc_unit = ProcessingUnit(generator, self.processors_seq, name)
         self.processors_seq += 1
         self.system_modules[QSystem.PROCESSOR].append(proc_unit)
-
-    def __init__(self, modules, statistics, isTimed, value, delta):
-        self.system_modules = modules
-        self.delta = delta
-        self.isTimed = isTimed
-        self.time_constraint = 0.0
-        self.requests_constraint = 0
-        if isTimed:
-            self.time_constraint = value
-        else:
-            self.requests_constraint = value
-        self.global_time = 0.0
-        self.inf_source_seq = 0
-        self.processors_seq = 0
-        self.statistics = statistics
 
     def interpret(self, model):
         for c in model.commands:
@@ -60,11 +45,13 @@ class QSystem:
                 self.requests_constraint = c.number
                 self.isTimed = False
             elif c.__class__.__name__ == "Generator":
-                generator = RandomGenerator(Distributions.get_distribution(c.distribution))
-                add_information_source(generator)
+                function = Distributions.get_distribution(c.distribution.name)
+                generator = RandomGenerator(function, c.distribution.args)
+                self.add_information_source(generator)
             elif c.__class__.__name__ == "Processor":
-                generator = RandomGenerator(Distributions.get_distribution(c.distribution))
-                add_processing_unit(generator)
+                function = Distributions.get_distribution(c.distribution.name)
+                generator = RandomGenerator(function, c.distribution.args)
+                self.add_processing_unit(generator)
             elif c.__class__.__name__ == "Connect":
                 flag = False
                 

@@ -1,9 +1,11 @@
 class ProcessingUnit:
-    def __init__(self, generator, number, return_percent, name):
+    name_template = "proc_"
+
+    def __init__(self, generator, number, name):
         self.name = name
         self.id = number
         self.active = False
-        self.return_percent = return_percent
+        #self.return_percent = return_percent
         self.current_time = 0
         self.previous_time = 0
         self.return_count = 0

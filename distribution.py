@@ -1,12 +1,12 @@
 import random
 
 class RandomGenerator():
-    def __init__(func, *args):
+    def __init__(self, func, args):
         self.generative_function = func
         self.args = args
 
     def generate_double(self):
-        return self.func(*self.args)
+        return self.generative_function(*self.args)
 
 class Distributions:
     def uniform(a, b):
@@ -26,13 +26,13 @@ class Distributions:
         return value
 
     distribution_dict = {
-        'uniform' :uniform,
+        'uniform' : uniform,
         'normal' : normal,
         'increment' : increment
     }
 
     def get_distribution(name):
-        for key, value in distribution_dict:
+        for key in Distributions.distribution_dict:
             if (key == name):
-                return value
+                return Distributions.distribution_dict[key]
         return increment

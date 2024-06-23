@@ -13,9 +13,11 @@ Command:
 
 Connection:
   other=STRING
+;
 
 Connect:
   'Connect' this=STRING connection*=Connection
+;
 
 SetTimeConstraint:
   'SetTimeConstraint' number=INT
@@ -26,7 +28,7 @@ SetRequestConstraint:
 ;
 
 Generator:
-  'Generator' distribution=Distribution b=INT template=STRING
+  'Generator' distribution=Distribution template=STRING
 ;
 
 Processor:
@@ -37,10 +39,14 @@ Statistics:
   'Statistics' type=Modules id=INT
 ;
 
-
 Distribution:
-  "normal" a=FLOAT b=FLOAT | "uniform" a=INT b=INT | "increment" a=INT
+  name=DistributionNames args*=FLOAT | name=DistributionNames args*=INT | name=DistributionNames args*=INT
 ;
+
+DistributionNames:
+  "normal" | "uniform" | "increment"
+;
+
 
 Modules:
   "generator" | "processor"
