@@ -1,13 +1,14 @@
 import tkinter as tk
 
-def on_entry_focus_out(event, entry, list_for_values):
+def on_entry_focus_out(event, entry, list_for_values, frame_to_focus):
     value = entry.get()
     list_for_values.append(value)
+    frame_to_focus.focus()
 
 def make_text_field(frame, width, padding, list_for_values):
     text_field = tk.Entry(frame, relief="sunken", width=width, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
     text_field.pack(pady=padding)
-    text_field.bind("<FocusOut>", lambda event: on_entry_focus_out(event, text_field, list_for_values))
+    text_field.bind("<Return>", lambda event: on_entry_focus_out(event, text_field, list_for_values, frame))
 
 
 def make_frame(root, list_for_values):
