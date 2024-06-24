@@ -32,6 +32,30 @@ class QSystem:
         proc_unit = ProcessingUnit(generator, name)
         self.system_modules[QSystem.PROCESSOR].append(proc_unit)
 
+    def prepare_information_sources(self):
+        for source in self.system_modules[QSystem.INF_SOURCE]:
+            source.generate_time()
+
+    def handle_information_sources(self, requests):
+        for source in self.system_modules[QSystem.INF_SOURCE]:
+                if self.global_time > source.get_current_time():
+                    requests.append(source.generate_request())
+
+    def handle_processing_units(self, q_in, q_out):
+        processed_number = 0
+        for processor in self.system_modules[QSystem.PROCESSOR]:
+                if processor.is_active() and self.global_time > processor.get_current_time():
+                    processor.set_active(False)
+                    processed_number += 1
+                if q_in:
+                    if not processor.is_active():
+                        processor.set_current_time(self.global_time)
+                        request = q_in.pop()
+                        request = processor.process_request(request)
+                        q_out.append(request)
+        return processed_number
+
+
     def interpret(self, model):
         for c in model.commands:
             if c.__class__.__name__ == "SetTimeConstraint":
@@ -66,25 +90,11 @@ class QSystem:
         requests = []
         finished_requests = []
 
-        for source in self.system_modules[QSystem.INF_SOURCE]:
-            source.generate_time()
-
+        self.prepare_information_sources()
         while self.global_time < self.time_constraint:
             self.global_time += QSystem.DELTA
-            for source in self.system_modules[QSystem.INF_SOURCE]:
-                if self.global_time > source.get_current_time():
-                    requests.append(source.generate_request())
-
-            for processor in self.system_modules[QSystem.PROCESSOR]:
-                if processor.is_active() and self.global_time < processor.get_current_time():
-                    processor.set_active(False)
-                if requests:
-                    if not processor.is_active():
-                        processor.set_current_time(self.global_time)
-
-                        request = requests.pop()
-                        request = processor.process_request(request)
-                        finished_requests.append(request)
+            self.handle_information_sources(requests)
+            self.handle_processing_units(requests, finished_requests)
 
         self.log_requests(finished_requests)
 
@@ -94,27 +104,11 @@ class QSystem:
         requests = []
         finished_requests = []
 
-        for source in self.system_modules[QSystem.INF_SOURCE]:
-            source.generate_time()
-
-        while processed_requests < self.requests_constraint:
+        self.prepare_information_sources()
+        while self.requests_constraint > processed_requests:
             self.global_time += QSystem.DELTA
-            for source in self.system_modules[QSystem.INF_SOURCE]:
-                if self.global_time > source.get_current_time():
-                    requests.append(source.generate_request())
-
-            for processor in self.system_modules[QSystem.PROCESSOR]:
-                if processor.is_active() and self.global_time < processor.get_current_time():
-                    processor.set_active(False)
-                    processed_requests += 1
-                if requests:
-                    if not processor.is_active():
-                        processor.set_current_time(self.global_time)
-                        processor.set_active(True)
-                        request = requests.pop()
-                        request = processor.process_request(request)
-                        finished_requests.append(request)
-                        print(request.get_name())
+            self.handle_information_sources(requests)
+            processed_requests += self.handle_processing_units(requests, finished_requests)
 
         self.log_requests(finished_requests)
 
