@@ -14,3 +14,15 @@ class Request:
 
     def set_status(self, status):
         self.status = status
+
+    def get_name(self):
+        return self.name
+
+    def get_finish_processing_time(self):
+        return self.finish_processing_time
+
+    def get_generation_time(self):
+        return self.generation_time
+
+    def get_start_processing_time(self):
+        return self.start_processing_time

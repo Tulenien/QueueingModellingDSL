@@ -28,11 +28,11 @@ SetRequestConstraint:
 ;
 
 Generator:
-  'Generator' distribution=Distribution template=STRING
+  'Generator' distribution=Distribution name=STRING
 ;
 
 Processor:
-  'Processor' distribution=Distribution template=STRING
+  'Processor' distribution=Distribution name=STRING
 ;
 
 Statistics:

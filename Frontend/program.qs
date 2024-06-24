@@ -1,6 +1,6 @@
 begin
- SetTimeConstraint 1
- Generator uniform 1 10 "A"
- Processor increment 2 "B"
- Connect "A" "B"
+ SetRequestConstraint 10
+ Generator uniform 1 2 "A"
+ Generator normal 3 1 "B"
+ Processor increment 1 "C"
 end

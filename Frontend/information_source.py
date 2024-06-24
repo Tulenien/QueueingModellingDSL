@@ -1,16 +1,18 @@
+from request import Request
+
 class InformationSource:
-    def __init__(self, random_generator, number, name_template):
-        self.id = number
+    def __init__(self, random_generator, name):
+        self.generator = random_generator
+        self.name = name
         self.requests_generated = 0
         self.current_time = 0.0
         self.previous_time = 0.0
-        self.generator = random_generator
-        self.requests_name_template = name_template
 
     def generate_request(self):
         self.requests_generated += 1
-        name = self.requests_name_template + str(self.requests_generated)
+        name = self.name + "_" + str(self.requests_generated)
         request = Request(name, self.current_time, "generated")
+        self.generate_time()
         return request
 
     def get_current_time(self):
@@ -28,7 +30,4 @@ class InformationSource:
         return self.current_time
 
     def get_name(self):
-        return self.requests_name_template
-
-    def get_id(self):
-        return id
+        return self.name
