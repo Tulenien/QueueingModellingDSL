@@ -8,6 +8,12 @@ class ProcessingUnit:
         self.current_time = 0.0
         self.previous_time = 0.0
         self.finished_count = 0
+    
+    def reset(self):
+        self.current_time = 0.0
+        self.previous_time = 0.0
+        self.finished_count = 0
+        self.active = False
 
     def process_request(self, request):
         self.active = True
@@ -35,3 +41,6 @@ class ProcessingUnit:
 
     def set_active(self, active):
         self.active = active
+
+    def get_random_generator(self):
+        return self.generator

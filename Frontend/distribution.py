@@ -1,12 +1,19 @@
 import random
 
 class RandomGenerator():
-    def __init__(self, func, args):
+    def __init__(self, func, args, distribution_name):
         self.generative_function = func
         self.args = args
+        self.distribution = distribution_name
 
     def generate_double(self):
         return self.generative_function(*self.args)
+
+    def get_distribution(self):
+        return self.distribution
+
+    def get_distribution_args(self):
+        return self.args
 
 class Distributions:
     def uniform(a, b):

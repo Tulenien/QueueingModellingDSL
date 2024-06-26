@@ -8,6 +8,11 @@ class InformationSource:
         self.current_time = 0.0
         self.previous_time = 0.0
 
+    def reset(self):
+        self.requests_generated = 0
+        self.current_time = 0.0
+        self.previous_time = 0.0
+
     def generate_request(self):
         self.requests_generated += 1
         name = self.name + "_" + str(self.requests_generated)
@@ -31,3 +36,6 @@ class InformationSource:
 
     def get_name(self):
         return self.name
+
+    def get_random_generator(self):
+        return self.generator

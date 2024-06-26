@@ -7,7 +7,7 @@ import request
 class QSystem:
     INF_SOURCE = "INF_SOURCE"
     PROCESSOR = "PROCESSOR"
-    DELTA = 1e-2#1e-5
+    DELTA = 1e-3
     STAT_DELTA = 1e-3
 
     def __init__(self):
@@ -23,6 +23,20 @@ class QSystem:
         self.isTimed = False
         self.global_time = 0.0
         self.statistics = Statistics(QSystem.STAT_DELTA)
+    
+    def soft_reset(self):
+        generators = self.get_generators()
+        processors = self.get_processors()
+        for gen in generators:
+            gen.reset()
+        for proc in processors:
+            proc.reset()
+
+    def get_generators(self):
+        return self.system_modules[QSystem.INF_SOURCE]
+
+    def get_processors(self):
+        return self.system_modules[QSystem.PROCESSOR]
 
     def add_information_source(self, generator, name="gen"):
         inf_source = InformationSource(generator, name)
@@ -57,6 +71,7 @@ class QSystem:
 
 
     def interpret(self, model):
+        self.hard_reset()
         for c in model.commands:
             if c.__class__.__name__ == "SetTimeConstraint":
                 self.time_constraint = c.number
@@ -68,12 +83,12 @@ class QSystem:
 
             elif c.__class__.__name__ == "Generator":
                 function = Distributions.get_distribution(c.distribution.name)
-                generator = RandomGenerator(function, c.distribution.args)
+                generator = RandomGenerator(function, c.distribution.args, c.distribution.name)
                 self.add_information_source(generator, c.name)
 
             elif c.__class__.__name__ == "Processor":
                 function = Distributions.get_distribution(c.distribution.name)
-                generator = RandomGenerator(function, c.distribution.args)
+                generator = RandomGenerator(function, c.distribution.args, c.distribution.name)
                 self.add_processing_unit(generator, c.name)
 
             elif c.__class__.__name__ == "Connect":
@@ -113,6 +128,7 @@ class QSystem:
         self.log_requests(finished_requests)
 
     def simulate(self):
+        self.soft_reset()
         if self.isTimed:
             self.time_simulation()
         else:
