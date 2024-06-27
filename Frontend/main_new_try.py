@@ -50,11 +50,13 @@ class MainApp(tk.Tk):
         choice = self.selected_system_type.get()
         if choice == 'timed':
             self.time_constraint_entry = tk.Entry(self.entry_frame)
+            self.time_constraint_entry.insert(tk.END, str(self.qsystem.get_time_constraint()))
             self.time_constraint_entry.pack(pady=5)
             self.time_constraint_entry_label = tk.Label(self.entry_frame, text="System time constraint")
             self.time_constraint_entry_label.pack()
         elif choice == 'requests':
             self.requests_constraint_entry = tk.Entry(self.entry_frame)
+            self.requests_constraint_entry.insert(tk.END, str(self.qsystem.get_requests_constraint()))
             self.requests_constraint_entry.pack(pady=5)
             self.requests_constraint_entry_label = tk.Label(self.entry_frame, text="System requests number constraint")
             self.requests_constraint_entry_label.pack()
@@ -64,6 +66,7 @@ class MainApp(tk.Tk):
             self.time_constraint_entry_label = tk.Label(self.entry_frame, text="System time constraint")
             self.time_constraint_entry_label.pack()
         self.delta_constraint = tk.Entry(self.entry_frame)
+        self.delta_constraint.insert(tk.END, str(self.qsystem.get_delta()))
         self.delta_constraint.pack(pady=5)
         self.delta_constraint_label = tk.Label(self.entry_frame, text="System time delta constraint")
         self.delta_constraint_label.pack()

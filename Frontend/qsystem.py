@@ -38,6 +38,15 @@ class QSystem:
     def get_processors(self):
         return self.system_modules[QSystem.PROCESSOR]
 
+    def get_time_constraint(self):
+        return self.time_constraint
+
+    def get_requests_constraint(self):
+        return self.requests_constraint
+
+    def get_delta(self):
+        return self.delta
+
     def add_information_source(self, generator, name="gen"):
         inf_source = InformationSource(generator, name)
         self.system_modules[QSystem.INF_SOURCE].append(inf_source)
