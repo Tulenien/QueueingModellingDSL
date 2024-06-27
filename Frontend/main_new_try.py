@@ -12,8 +12,6 @@ class MainApp(tk.Tk):
         self.model_file_path = None
         self.metamodel_file_path = None
 
-        self.selected_system_type = None
-
         this_folder = os.path.dirname(__file__)
         self.model_file_path = os.path.join(this_folder, 'program.qs')
         self.metamodel_file_path = os.path.join(this_folder, 'qsystem.tx')
@@ -21,6 +19,8 @@ class MainApp(tk.Tk):
         super().__init__()
         self.title("Main Window")
         self.geometry("800x600")
+        self.selected_system_type = tk.StringVar()
+        self.selected_system_type.set("timed")
         self.start()
 
     def clear_window(self):
@@ -46,13 +46,14 @@ class MainApp(tk.Tk):
             self.metamodel_path_label = tk.Label(self, text=f"Selected file: {self.metamodel_file_path}")
             self.metamodel_path_label.pack(pady=10)
 
-    def display_system_constraints_entry(self, event):
-        if self.selected_system_type == 'timed':
+    def display_system_constraints_entry(self):
+        choice = self.selected_system_type.get()
+        if choice == 'timed':
             self.time_constraint_entry = tk.Entry(self.entry_frame)
             self.time_constraint_entry.pack(pady=5)
             self.time_constraint_entry_label = tk.Label(self.entry_frame, text="System time constraint")
             self.time_constraint_entry_label.pack()
-        elif self.selected_system_type == 'requests':
+        elif choice == 'requests':
             self.requests_constraint_entry = tk.Entry(self.entry_frame)
             self.requests_constraint_entry.pack(pady=5)
             self.requests_constraint_entry_label = tk.Label(self.entry_frame, text="System requests number constraint")
@@ -65,26 +66,33 @@ class MainApp(tk.Tk):
         self.delta_constraint = tk.Entry(self.entry_frame)
         self.delta_constraint.pack(pady=5)
         self.delta_constraint_label = tk.Label(self.entry_frame, text="System time delta constraint")
+        self.delta_constraint_label.pack()
 
     def submit_form(self):
-        if self.selected_system_type == 'timed':
+        choice = self.selected_system_type.get()
+        if choice == 'timed':
             pass
-        elif self.selected_system_type == 'requests':
+        elif choice == 'requests':
             pass
         else:
             pass
 
-    def setup_system_widget(self):
+    def setup_system_widget(self, event=None):
         self.clear_window()
+
+        self.system_widget_header = tk.Label(self, text="Choose system constraints")
+        self.system_widget_header.pack()
 
         options = ['timed', 'requests']
         self.system_type_choice = ttk.Combobox(self, values=options, textvariable=self.selected_system_type)
         self.system_type_choice.pack(pady=20)
-        self.system_type_choice.bind("<<ComboboxSelected>>", self.display_system_constraints_entry)
+        self.system_type_choice.bind("<<ComboboxSelected>>", self.setup_system_widget)
 
         # Frame to hold the dynamic entry fields
         self.entry_frame = tk.Frame(self)
         self.entry_frame.pack(pady=20)
+
+        self.display_system_constraints_entry()
         
         # Create 'Back' and 'Next' buttons
         self.back_button = tk.Button(self, text="Back", command=self.start)
