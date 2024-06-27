@@ -64,6 +64,13 @@ class QSystem:
     def add_information_source(self, generator, name="gen"):
         inf_source = InformationSource(generator, name)
         self.system_modules[QSystem.INF_SOURCE].append(inf_source)
+
+    def remove_information_source(self, name):
+        generators = self.get_generators()
+        for gen in generators:
+            if name == gen.get_name():
+                generators.remove(gen)
+                break
     
     def add_processing_unit(self, generator, name = "proc"):
         proc_unit = ProcessingUnit(generator, name)
