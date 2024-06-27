@@ -71,6 +71,13 @@ class QSystem:
             if name == gen.get_name():
                 generators.remove(gen)
                 break
+
+    def remove_processing_unit(self, name):
+        processors = self.get_processors()
+        for proc in processors:
+            if name == proc.get_name():
+                processors.remove(proc)
+                break
     
     def add_processing_unit(self, generator, name = "proc"):
         proc_unit = ProcessingUnit(generator, name)
