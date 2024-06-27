@@ -65,18 +65,19 @@ class MainApp(tk.Tk):
             self.time_constraint_entry.pack(pady=5)
             self.time_constraint_entry_label = tk.Label(self.entry_frame, text="System time constraint")
             self.time_constraint_entry_label.pack()
-        self.delta_constraint = tk.Entry(self.entry_frame)
-        self.delta_constraint.insert(tk.END, str(self.qsystem.get_delta()))
-        self.delta_constraint.pack(pady=5)
+        self.delta_constraint_entry = tk.Entry(self.entry_frame)
+        self.delta_constraint_entry.insert(tk.END, str(self.qsystem.get_delta()))
+        self.delta_constraint_entry.pack(pady=5)
         self.delta_constraint_label = tk.Label(self.entry_frame, text="System time delta constraint")
         self.delta_constraint_label.pack()
 
-    def submit_form(self):
+    def submit_constraints_form(self):
         choice = self.selected_system_type.get()
+        self.qsystem.set_delta(self.delta_constraint_entry.get())
         if choice == 'timed':
-            pass
+            self.qsystem.set_time_constraint(self.time_constraint_entry.get())
         elif choice == 'requests':
-            pass
+            self.qsystem.set_requests_constaint(self.requests_constraint_entry.get())
         else:
             pass
 
@@ -101,7 +102,7 @@ class MainApp(tk.Tk):
         self.back_button = tk.Button(self, text="Back", command=self.start)
         self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
         
-        self.submit_button = tk.Button(self, text="Submit", command=self.submit_form)
+        self.submit_button = tk.Button(self, text="Submit", command=self.submit_constraints_form)
         self.submit_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
     def simulate(self):
