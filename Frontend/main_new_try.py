@@ -5,6 +5,9 @@ from tkinter import filedialog, messagebox
 from qsystem import QSystem
 from qmodel import QModel
 
+style = ttk.Style()
+style.configure("Custom.Treeview", background="#f0f0ff", foreground="black", rowheight=25)
+
 class MainApp(tk.Tk):
     def __init__(self):
         self.qsystem = QSystem()
@@ -16,12 +19,25 @@ class MainApp(tk.Tk):
         self.model_file_path = os.path.join(this_folder, 'program.qs')
         self.metamodel_file_path = os.path.join(this_folder, 'qsystem.tx')
 
+
         super().__init__()
         self.title("Main Window")
         self.geometry("800x600")
+        self.configure(bg="#ccddf3")
+        self.center_window()
         self.selected_system_type = tk.StringVar()
         self.selected_system_type.set("timed")
         self.start()
+
+
+
+    def center_window(self):
+        self.update_idletasks()
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x_offset = (self.winfo_screenwidth() - width) // 2
+        y_offset = (self.winfo_screenheight() - height) // 2
+        self.geometry('{}x{}+{}+{}'.format(width, height, x_offset, y_offset))
 
     def clear_window(self):
         for widget in self.winfo_children():
@@ -30,21 +46,22 @@ class MainApp(tk.Tk):
     def start(self):
         self.clear_window()
 
-        self.return_button = tk.Button(self, text="Input model parameters", command=self.setup_system_widget)
-        self.return_button.pack(pady=20)
+        self.welcome_label = tk.Label(self, text="QUEUEING MODELLING DSL", bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold'))
+        self.welcome_label.pack(fill=tk.BOTH, pady=30)  # center label in frame
+
+        self.return_button = tk.Button(self, text="INPUT  MODEL  PARAMETERS", command=self.setup_system_widget, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'), width=30)
+        self.return_button.pack(pady=15)
         
-        self.open_file_button = tk.Button(self, text="Load textX model", command=self.load_model)
-        self.open_file_button.pack(pady=20)
+        self.open_file_button = tk.Button(self, text="LOAD TEXTX MODEL", command=self.load_model, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'),  width=30)
+        self.open_file_button.pack(pady=15)
 
-        self.use_cached_model_button = tk.Button(self, text="Use saved textX model", command=self.create_simulation_widget)
-        self.use_cached_model_button.pack(pady=20)
+        self.use_cached_model_button = tk.Button(self, text="USE SAVED TEXTX MODEL", command=self.create_simulation_widget, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'),  width=30)
+        self.use_cached_model_button.pack(pady=15)
 
-        if self.model_file_path:
-            self.file_path_label = tk.Label(self, text=f"Selected file: {self.model_file_path}")
-            self.file_path_label.pack(pady=10)
-        if self.metamodel_file_path:
-            self.metamodel_path_label = tk.Label(self, text=f"Selected file: {self.metamodel_file_path}")
-            self.metamodel_path_label.pack(pady=10)
 
     def display_system_constraints_entry(self):
         choice = self.selected_system_type.get()
@@ -108,6 +125,7 @@ class MainApp(tk.Tk):
         self.qsystem.simulate()
 
     def create_table(self, table_frame, *args):
+
         tree = ttk.Treeview(table_frame, columns=(args), show='headings')
         for arg in args:
             tree.heading(arg, text=arg)
@@ -137,13 +155,15 @@ class MainApp(tk.Tk):
             self.model = self.qmodel.import_textx_model(self.metamodel_file_path, self.model_file_path)
             self.qsystem.interpret(self.model)
 
-            self.file_path_label = tk.Label(self, text=f"Using textx model: {self.model_file_path}")
-            self.file_path_label.pack(pady=10)
+            self.file_path_label = tk.Label(self, text=f"Using textx model: {self.model_file_path}", bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 10, 'bold'))
+            self.file_path_label.pack(fill=tk.BOTH, pady=10)
 
             table_frame = tk.Frame(self)
             table_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
 
             self.tree = self.create_table(table_frame, "name", "type", "distribution", "distribution args")
+
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
@@ -157,6 +177,9 @@ class MainApp(tk.Tk):
             self.start()
 
     def load_model(self):
+        self.frame_for_selected_files = tk.Frame(self, width=800, height=500, bg="#ccddf3")
+        self.frame_for_selected_files.pack(pady=10)
+
         model_path = filedialog.askopenfilename(
             initialdir=os.path.dirname(__file__),
             title="Select .qs File",
@@ -165,6 +188,19 @@ class MainApp(tk.Tk):
         )
         if model_path and model_path != '':
             self.model_file_path = model_path
+
+            if self.model_file_path:
+                self.chosen_file_label = tk.Label(self.frame_for_selected_files, text="Chosen files:", bg="#ccddf3",
+                                                  fg="#193d6c",
+                                                  font=('Times', 12, 'bold'))
+                self.chosen_file_label.pack(fill=tk.BOTH, pady=10)
+
+                self.file_path_label = tk.Label(self.frame_for_selected_files, text=f"Selected model file: {self.model_file_path}", bg="#ccddf3",
+                                                  fg="#193d6c",
+                                                  font=('Times', 10, 'bold'))
+                self.file_path_label.pack(pady=5)
+
+
             metamodel_path = filedialog.askopenfilename(
                 initialdir=os.path.dirname(__file__),
                 title="Select .tx File",
@@ -173,12 +209,20 @@ class MainApp(tk.Tk):
             )
             if metamodel_path and metamodel_path != '':
                 self.metamodel_file_path = metamodel_path
-                # Everything is valid, go to simulation widget
-                self.create_simulation_widget()
+
+                if self.metamodel_file_path:
+                    self.metamodel_path_label = tk.Label(self.frame_for_selected_files,
+                                                         text=f"Selected metamodel file: {self.metamodel_file_path}", bg="#ccddf3",
+                                                  fg="#193d6c",
+                                                  font=('Times', 10, 'bold'))
+                    self.metamodel_path_label.pack(pady=5)
+                    self.update()
+                    self.after(2000, self.create_simulation_widget())
             else:
                 self.start()
         else:
             self.start()
+
 
     def handle_file_path(self, file_path):
         # Handle the file path as needed
