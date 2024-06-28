@@ -40,7 +40,7 @@ Statistics:
 ;
 
 Distribution:
-  name=DistributionNames args*=FLOAT | name=DistributionNames args*=INT | name=DistributionNames args*=INT
+  name=DistributionNames args*=FLOAT | name=DistributionNames args*=INT
 ;
 
 DistributionNames:

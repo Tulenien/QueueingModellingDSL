@@ -47,9 +47,37 @@ class QSystem:
     def get_delta(self):
         return self.delta
 
+    def set_time_constraint(self, time):
+        self.set_isTimed(True)
+        self.time_constraint = time
+
+    def set_requests_constaint(self, requests):
+        self.set_isTimed(False)
+        self.requests_constraint = requests
+
+    def set_isTimed(self, value):
+        self.isTimed = value
+
+    def set_delta(self, delta):
+        self.delta = delta
+
     def add_information_source(self, generator, name="gen"):
         inf_source = InformationSource(generator, name)
         self.system_modules[QSystem.INF_SOURCE].append(inf_source)
+
+    def remove_information_source(self, name):
+        generators = self.get_generators()
+        for gen in generators:
+            if name == gen.get_name():
+                generators.remove(gen)
+                break
+
+    def remove_processing_unit(self, name):
+        processors = self.get_processors()
+        for proc in processors:
+            if name == proc.get_name():
+                processors.remove(proc)
+                break
     
     def add_processing_unit(self, generator, name = "proc"):
         proc_unit = ProcessingUnit(generator, name)
