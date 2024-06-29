@@ -195,7 +195,7 @@ class MainApp(tk.Tk):
             args.append(float(self.gen_a))
         function = Distributions.get_distribution(distribution_name)
         generator = RandomGenerator(function, args, distribution_name)
-        self.qsystem.add_processing_unit(generator, self.gen_name)
+        self.qsystem.add_information_source(generator, self.gen_name)
         self.soft_reset_generator_values()
 
     def delete_information_source(self):
