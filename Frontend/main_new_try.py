@@ -290,7 +290,7 @@ class MainApp(tk.Tk):
             self.a_label.grid(row = 0, column = 0, padx=10)
             self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
-            self.gen_a_entry.grid(row = 0, column = 1, padx=40)
+            self.gen_a_entry.grid(row = 0, column = 1, padx=5)
 
             self.b_label = tk.Label(fourth_frame, text="b",  bg="#ccddf3", fg="#193d6c",
                          font=('Times', 14, 'bold')) # b
@@ -506,14 +506,14 @@ class MainApp(tk.Tk):
             self.a_label = tk.Label(fourth_frame, text="a",  bg="#ccddf3", fg="#193d6c",
                          font=('Times', 14, 'bold')) # a
             self.a_label.grid(row = 0, column = 0, padx=10)
-            self.proc_a_entry = tk.Entry(self, relief="sunken", width=20, font=("Times", 14, 'bold'),
+            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
                                                    bd=2, fg="#193d6c")
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
             self.proc_a_entry.grid(row = 0, column = 1, padx=40)
             self.b_label = tk.Label(fourth_frame, text="b",  bg="#ccddf3", fg="#193d6c",
                          font=('Times', 14, 'bold')) # b
             self.b_label.grid(row = 0, column = 2, padx=10)
-            self.proc_b_entry = tk.Entry(self, relief="sunken", width=20, font=("Times", 14, 'bold'),
+            self.proc_b_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
                                                    bd=2, fg="#193d6c")
             self.proc_b_entry.insert(tk.END, str(self.proc_b))
             self.proc_b_entry.grid(row = 0, column = 3)
