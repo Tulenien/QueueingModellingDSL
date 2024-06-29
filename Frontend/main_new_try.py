@@ -6,8 +6,6 @@ from qsystem import QSystem
 from qmodel import QModel
 from distribution import Distributions, RandomGenerator
 
-style = ttk.Style()
-style.configure("Custom.Treeview", background="#f0f0ff", foreground="black", rowheight=25)
 
 class MainApp(tk.Tk):
     DEFAULT_GEN_NAME = "G"
@@ -90,27 +88,39 @@ class MainApp(tk.Tk):
     def display_system_constraints_entry(self, frame):
         choice = self.selected_system_type.get()
         if choice == 'timed':
-            self.time_constraint_entry = tk.Entry(frame)
+            self.time_constraint_entry_label = tk.Label(frame, text="2. SYSTEM TIME CONSTRAINT", bg="#ccddf3",
+                                                        fg="#193d6c",
+                                                        font=('Times', 12, 'bold'))
+            self.time_constraint_entry_label.pack()
+
+            self.time_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.time_constraint_entry.insert(tk.END, str(self.qsystem.get_time_constraint()))
-            self.time_constraint_entry.pack(pady=5)
-            self.time_constraint_entry_label = tk.Label(frame, text="System time constraint")
-            self.time_constraint_entry_label.pack()
+            self.time_constraint_entry.pack(pady=15)
+
         elif choice == 'requests':
-            self.requests_constraint_entry = tk.Entry(frame)
-            self.requests_constraint_entry.insert(tk.END, str(self.qsystem.get_requests_constraint()))
-            self.requests_constraint_entry.pack(pady=5)
-            self.requests_constraint_entry_label = tk.Label(frame, text="System requests number constraint")
+            self.requests_constraint_entry_label = tk.Label(frame, text="2. SYSTEM REQUESTS NUMBER CONSTRAINT",
+                                                            bg="#ccddf3", fg="#193d6c",
+                                                            font=('Times', 12, 'bold'))
             self.requests_constraint_entry_label.pack()
+            self.requests_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.requests_constraint_entry.insert(tk.END, str(self.qsystem.get_requests_constraint()))
+            self.requests_constraint_entry.pack(pady=15)
+
         else:
-            self.time_constraint_entry = tk.Entry(frame)
-            self.time_constraint_entry.pack(pady=5)
-            self.time_constraint_entry_label = tk.Label(frame, text="System time constraint")
+            self.time_constraint_entry_label = tk.Label(frame, text="2. SYSTEM TIME CONSTRAINT", bg="#ccddf3",
+                                                        fg="#193d6c",
+                                                        font=('Times', 12, 'bold'))
             self.time_constraint_entry_label.pack()
-        self.delta_constraint_entry = tk.Entry(frame)
-        self.delta_constraint_entry.insert(tk.END, str(self.qsystem.get_delta()))
-        self.delta_constraint_entry.pack(pady=5)
-        self.delta_constraint_label = tk.Label(frame, text="System time delta constraint")
+            self.time_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.time_constraint_entry.pack(pady=15)
+
+        self.delta_constraint_label = tk.Label(frame, text="3. SYSTEM TIME DELTA CONSTRAINT", bg="#ccddf3", fg="#193d6c",
+                                               font=('Times', 12, 'bold'))
         self.delta_constraint_label.pack()
+        self.delta_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+        self.delta_constraint_entry.insert(tk.END, str(self.qsystem.get_delta()))
+        self.delta_constraint_entry.pack(pady=10)
+
 
     def submit_constraints_form(self):
         choice = self.selected_system_type.get()
@@ -127,25 +137,32 @@ class MainApp(tk.Tk):
     def setup_system_widget(self, event=None):
         self.clear_window()
 
-        self.system_widget_header = tk.Label(self, text="Choose system constraints")
+        self.system_widget_header = tk.Label(self, text="SYSTEM SETUP", bg="#ccddf3", fg="#193d6c",
+                                             font=('Times', 14, 'bold'))
+        self.system_widget_header.pack(pady=30)
+
+        self.system_widget_header = tk.Label(self, text="1. CHOOSE SYSTEM CONSTRAINTS",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 12, 'bold'))
         self.system_widget_header.pack()
 
         options = ['timed', 'requests']
-        self.system_type_choice = ttk.Combobox(self, values=options, textvariable=self.selected_system_type)
-        self.system_type_choice.pack(pady=20)
+        self.system_type_choice = ttk.Combobox(self, values=options, textvariable=self.selected_system_type, width=20, background="#ccddf3", foreground="#193d6c", font=('Times', 13, 'bold'))
+        self.system_type_choice.pack(pady=10)
         self.system_type_choice.bind("<<ComboboxSelected>>", self.setup_system_widget)
 
         # Frame to hold the dynamic entry fields
-        self.system_entry_frame = tk.Frame(self)
+        self.system_entry_frame = tk.Frame(self, bg="#ccddf3")
         self.system_entry_frame.pack(pady=20)
 
         self.display_system_constraints_entry(self.system_entry_frame)
         
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(self, text="Back", command=self.start)
+        self.back_button = tk.Button(self, text="BACK", command=self.start, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
         self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
         
-        self.submit_button = tk.Button(self, text="Submit", command=self.submit_constraints_form)
+        self.submit_button = tk.Button(self, text="SUBMIT", command=self.submit_constraints_form, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
         self.submit_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
     def save_information_source(self):
@@ -205,7 +222,7 @@ class MainApp(tk.Tk):
         self.gen_edit_mode = False
         self.generators_choice_widget()
 
-    def display_generator_entry(self, row = 0, col = 0):
+    def display_generator_entry(self):
         if self.gen_edit_mode == True:
             generator_name = self.selected_generator.get()
             generators = self.qsystem.get_generators()
@@ -221,72 +238,89 @@ class MainApp(tk.Tk):
                     self.gen_name = generator_name
                     break        
         rg_choice = self.selected_random_generator.get()
-        self.gen_entry_name_label = tk.Label(self, text = "Enter information source name: ")
-        self.gen_entry_name_label.grid(row = row, column = col)
-        col += 1
-        self.gen_entry_name = tk.Entry(self)
+
+        second_frame = tk.Frame(self, bg="#ccddf3")
+        second_frame.pack(pady=10)
+
+
+        self.gen_entry_name_label = tk.Label(second_frame, text = "Enter information source name: ",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold'))
+        self.gen_entry_name_label.grid(row=0, column=0)
+
+        self.gen_entry_name = tk.Entry(second_frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
         self.gen_entry_name.insert(tk.END, self.gen_name)
-        self.gen_entry_name.grid(row = row, column = col)
-        row += 1
-        col = 0
-        distribution_label = tk.Label(self, text = "Choose distribution:")
-        distribution_label.grid(row = row, column = col)
-        col += 1
+        self.gen_entry_name.grid(row=0, column=1)
+
+        third_frame = tk.Frame(self, bg="#ccddf3")
+        third_frame.pack(pady=10)
+
+
+        distribution_label = tk.Label(third_frame, text = "Choose distribution:",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold'))
+        distribution_label.grid(row=0, column=0, padx=10)
+
         options = ['normal', 'uniform', 'increment']
-        self.distribution_cbox = ttk.Combobox(self, values=options, textvariable=self.selected_random_generator)
+        self.distribution_cbox = ttk.Combobox(third_frame, values=options, textvariable=self.selected_random_generator, width=28, background="#ccddf3", foreground="#193d6c", font=('Times', 14, 'bold'))
         self.distribution_cbox.bind("<<ComboboxSelected>>", self.generators_choice_widget)
-        self.distribution_cbox.grid(row = row, column = col)
-        col = 0
-        row += 1
+        self.distribution_cbox.grid(row=0, column=1)
+
+        fourth_frame = tk.Frame(self, bg="#ccddf3")
+        fourth_frame.pack(pady=10)
+
         if rg_choice == 'normal':
-            self.mu_label = tk.Label(self, text="\u03bc") # mu, mean
-            self.mu_label.grid(row = row, column = col)
-            col += 1
-            self.gen_a_entry = tk.Entry(self)
+            self.mu_label = tk.Label(fourth_frame, text="\u03bc",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # mu, mean
+            self.mu_label.grid(row=0, column =0, padx=5)
+
+            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
-            self.gen_a_entry.grid(row = row, column = col)
-            col += 1
-            self.sigma_label = tk.Label(self, text="\u03C3") # sigma, standard deviation
-            self.sigma_label.grid(row = row, column = col)
-            col += 1
-            self.gen_b_entry = tk.Entry(self)
+            self.gen_a_entry.grid(row=0, column=1, padx=5)
+
+            self.sigma_label = tk.Label(fourth_frame, text="\u03C3",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # sigma, standard deviation
+            self.sigma_label.grid(row = 0, column = 2, padx=5)
+
+            self.gen_b_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.gen_b_entry.insert(tk.END, str(self.gen_b))
-            self.gen_b_entry.grid(row = row, column = col)
-            col = 0
-            row += 1
+            self.gen_b_entry.grid(row = 0, column = 3)
+
         elif rg_choice == 'uniform':
-            self.a_label = tk.Label(self, text="a") # a
-            self.a_label.grid(row = row, column = col)
-            col += 1
-            self.gen_a_entry = tk.Entry(self)
+            self.a_label = tk.Label(fourth_frame, text="a",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # a
+            self.a_label.grid(row = 0, column = 0, padx=10)
+            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
-            self.gen_a_entry.grid(row = row, column = col)
-            col += 1
-            self.b_label = tk.Label(self, text="b") # b
-            self.b_label.grid(row = row, column = col)
-            col += 1
-            self.gen_b_entry = tk.Entry(self)
+            self.gen_a_entry.grid(row = 0, column = 1, padx=40)
+
+            self.b_label = tk.Label(fourth_frame, text="b",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # b
+            self.b_label.grid(row= 0, column = 2, padx=10)
+
+            self.gen_b_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.gen_b_entry.insert(tk.END, str(self.gen_b))
-            self.gen_b_entry.grid(row = row, column = col)
-            col = 0
-            row += 1
+            self.gen_b_entry.grid(row = 0, column = 3,)
+
         elif rg_choice == 'increment':
-            self.a_label = tk.Label(self, text="value") # increment
-            self.a_label.grid(row = row, column = col)
-            col += 1
-            self.gen_a_entry = tk.Entry(self)
+            self.a_label = tk.Label(fourth_frame, text="value", bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # increment
+            self.a_label.grid(row = 0, column = 0, padx=10)
+
+            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
-            self.gen_a_entry.grid(row = row, column = col)
-            col = 0
-            row += 1
+            self.gen_a_entry.grid(row = 0, column = 1)
+
+        fifth_frame = tk.Frame(self, bg="#ccddf3")
+        fifth_frame.pack(pady=10)
         if self.gen_edit_mode:
-            self.save_button = tk.Button(self, text = "Save", command = self.save_information_source)
-            self.save_button.grid(row = row, column = col, padx=10, pady=10)
+
+            self.save_button = tk.Button(fifth_frame, text = "SAVE", command = self.save_information_source, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.save_button.grid(row = 0, column = 0, padx=10, pady=10)
         else:
-            self.gen_add_button = tk.Button(self, text="Add", command=self.add_information_source)
-            self.gen_add_button.grid(row = row, column = col, padx=10, pady=10)
-        row += 1
-        return row, col
+            self.gen_add_button = tk.Button(fifth_frame, text="ADD", command=self.add_information_source, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.gen_add_button.grid(row = 0, column = 1, padx=10, pady=10)
+
 
     def choose_generator(self, event):
         if self.generator_choice.get() != '':
@@ -296,39 +330,53 @@ class MainApp(tk.Tk):
     def generators_choice_widget(self, event = None):
         self.clear_window()
 
-        current_row, current_col = 0, 0
+        gen_title_label = tk.Label(self, text="GENERATE GENERATORS AND GENERATOR'S SETTINGS", bg="#ccddf3", fg="#193d6c",
+                             font=('Times', 14, 'bold'))
+        gen_title_label.pack(pady=30)
 
-        gen_label = tk.Label(self, text="Choose information sources")
-        gen_label.grid(row = current_row)
-        current_row += 1
 
+        first_frame = tk.Frame(self, bg="#ccddf3")
+        first_frame.pack(pady=20)
+
+
+        gen_label = tk.Label(first_frame, text="Choose information sources", bg="#ccddf3", fg="#193d6c",
+                             font=('Times', 14, 'bold'))
+        gen_label.grid(row=0, column=0)
+
+        #Create a generator combobox
         generators = self.qsystem.get_generators()
         options = [x.get_name() for x in generators]
-        self.generator_choice = ttk.Combobox(self, values=options, textvariable=self.selected_generator)
-        self.generator_choice.grid(row = current_row, column = current_col, padx=10, pady=10)
-        current_col += 1
+        self.generator_choice = ttk.Combobox(first_frame, values=options, textvariable=self.selected_generator, width=28, background="#ccddf3", foreground="#193d6c", font=('Times', 14, 'bold'))
+        self.generator_choice.grid(row=0, column=1, padx=10, pady=10)
         self.generator_choice.bind("<<ComboboxSelected>>", self.choose_generator)
-        
+
         # Create a Delete button
-        self.gen_delete_button = tk.Button(self, text="Delete", command = self.delete_information_source)
-        self.gen_delete_button.grid(row = current_row, column = current_col, padx=10, pady=10)
-        current_col += 1
+        self.gen_delete_button = tk.Button(first_frame, text="DELETE", command=self.delete_information_source,
+                                           foreground='#F5F5F5',
+                                           background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.gen_delete_button.grid(row=1, column=0, padx=10, pady=10)
 
         # Create form reset button
-        self.gen_new_button = tk.Button(self, text="Clear", command = self.soft_reset_generator_values)
-        self.gen_new_button.grid(row = current_row, column = current_col, padx=10, pady=10)
-        current_col = 0  
-        current_row += 1
+        self.gen_new_button = tk.Button(first_frame, text="CLEAR", command=self.soft_reset_generator_values,
+                                        foreground='#F5F5F5',
+                                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.gen_new_button.grid(row=1, column=1, padx=10, pady=10)
 
-        current_row, current_col = self.display_generator_entry(current_row, current_col)
+
+        self.display_generator_entry()
+
+        button_frame = tk.Frame(self, bg="#ccddf3")
+        button_frame.pack(pady=10)
 
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(self, text="Back", command = self.setup_system_widget)
-        self.back_button.grid(row = current_row, column = current_col, padx=20, pady=20)
-        current_col += 1
-        
-        self.submit_button = tk.Button(self, text="Submit", command = self.processors_choice_widget)
-        self.submit_button.grid(row = current_row, column = current_col, padx=20, pady=20)
+        self.back_button = tk.Button(button_frame, text="BACK", command=self.setup_system_widget, foreground='#F5F5F5',
+                                     background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button.grid(row=0, column=0, padx=20, pady=20)
+
+        self.submit_button = tk.Button(button_frame, text="SUBMIT", command=self.processors_choice_widget, foreground='#F5F5F5',
+                                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.submit_button.grid(row=0, column=1, padx=20, pady=20)
+
 
     def save_processing_unit(self):
         self.qsystem.remove_processing_unit(self.selected_processor.get())
@@ -387,7 +435,7 @@ class MainApp(tk.Tk):
         self.proc_edit_mode = False
         self.processors_choice_widget()
 
-    def display_processor_entry(self, row = 0, col = 0):
+    def display_processor_entry(self):
         if self.proc_edit_mode == True:
             processor_name = self.selected_processor.get()
             processors = self.qsystem.get_processors()
@@ -401,74 +449,98 @@ class MainApp(tk.Tk):
                     elif distribution == "increment":
                         self.proc_a = rg.get_distribution_args()[0]
                     self.proc_name = processor_name
-                    break        
+                    break
+
+        second_frame = tk.Frame(self, bg="#ccddf3")
+        second_frame.pack(pady=10)
+
         rg_choice = self.selected_random_generator.get()
-        self.proc_entry_name_label = tk.Label(self, text = "Enter processor unit name: ")
-        self.proc_entry_name_label.grid(row = row, column = col)
-        col += 1
-        self.proc_entry_name = tk.Entry(self)
+        self.proc_entry_name_label = tk.Label(second_frame, text = "Enter processor unit name: ",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold'))
+        self.proc_entry_name_label.grid(row=0, column=0)
+
+        self.proc_entry_name = tk.Entry(second_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
+                                                   bd=2, fg="#193d6c")
         self.proc_entry_name.insert(tk.END, self.proc_name)
-        self.proc_entry_name.grid(row = row, column = col)
-        row += 1
-        col = 0
-        distribution_label = tk.Label(self, text = "Choose distribution:")
-        distribution_label.grid(row = row, column = col)
-        col += 1
+        self.proc_entry_name.grid(row=0, column=1)
+
+        third_frame = tk.Frame(self, bg="#ccddf3")
+        third_frame.pack(pady=10)
+
+
+        distribution_label = tk.Label(third_frame, text = "Choose distribution:",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold'))
+        distribution_label.grid(row=0, column=0, padx=10)
+
         options = ['normal', 'uniform', 'increment']
-        self.distribution_cbox = ttk.Combobox(self, values=options, textvariable=self.selected_random_generator)
+        self.distribution_cbox = ttk.Combobox(third_frame, values=options, textvariable=self.selected_random_generator,  width=28,
+                                                          background="#ccddf3", foreground="#193d6c",
+                                                          font=('Times', 14, 'bold'))
         self.distribution_cbox.bind("<<ComboboxSelected>>", self.processors_choice_widget)
-        self.distribution_cbox.grid(row = row, column = col)
-        col = 0
-        row += 1
+        self.distribution_cbox.grid(row=0, column=1)
+
+        fourth_frame = tk.Frame(self, bg="#ccddf3")
+        fourth_frame.pack(pady=10)
+
+
         if rg_choice == 'normal':
-            self.mu_label = tk.Label(self, text="\u03bc") # mu, mean
-            self.mu_label.grid(row = row, column = col)
-            col += 1
-            self.proc_a_entry = tk.Entry(self)
+            self.mu_label = tk.Label(fourth_frame, text="\u03bc",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # mu, mean
+            self.mu_label.grid(row=0, column =0, padx=5)
+
+            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
+                                                   bd=2, fg="#193d6c")
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
-            self.proc_a_entry.grid(row = row, column = col)
-            col += 1
-            self.sigma_label = tk.Label(self, text="\u03C3") # sigma, standard deviation
-            self.sigma_label.grid(row = row, column = col)
-            col += 1
-            self.proc_b_entry = tk.Entry(self)
+            self.proc_a_entry.grid(row = 0, column = 1)
+
+            self.sigma_label = tk.Label(fourth_frame, text="\u03C3",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # sigma, standard deviation
+            self.sigma_label.grid(row=0, column=2, padx=5)
+
+            self.proc_b_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
+                                                   bd=2, fg="#193d6c")
             self.proc_b_entry.insert(tk.END, str(self.proc_b))
-            self.proc_b_entry.grid(row = row, column = col)
-            col = 0
-            row += 1
+            self.proc_b_entry.grid(row=0, column=3)
+
         elif rg_choice == 'uniform':
-            self.a_label = tk.Label(self, text="a") # a
-            self.a_label.grid(row = row, column = col)
-            col += 1
-            self.proc_a_entry = tk.Entry(self)
+            self.a_label = tk.Label(fourth_frame, text="a",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # a
+            self.a_label.grid(row = 0, column = 0, padx=10)
+            self.proc_a_entry = tk.Entry(self, relief="sunken", width=20, font=("Times", 14, 'bold'),
+                                                   bd=2, fg="#193d6c")
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
-            self.proc_a_entry.grid(row = row, column = col)
-            col += 1
-            self.b_label = tk.Label(self, text="b") # b
-            self.b_label.grid(row = row, column = col)
-            col += 1
-            self.proc_b_entry = tk.Entry(self)
+            self.proc_a_entry.grid(row = 0, column = 1, padx=40)
+            self.b_label = tk.Label(fourth_frame, text="b",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # b
+            self.b_label.grid(row = 0, column = 2, padx=10)
+            self.proc_b_entry = tk.Entry(self, relief="sunken", width=20, font=("Times", 14, 'bold'),
+                                                   bd=2, fg="#193d6c")
             self.proc_b_entry.insert(tk.END, str(self.proc_b))
-            self.proc_b_entry.grid(row = row, column = col)
-            col = 0
-            row += 1
+            self.proc_b_entry.grid(row = 0, column = 3)
+
         elif rg_choice == 'increment':
-            self.a_label = tk.Label(self, text="value") # increment
-            self.a_label.grid(row = row, column = col)
-            col += 1
-            self.proc_a_entry = tk.Entry(self)
+            self.a_label = tk.Label(fourth_frame, text="value",  bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 14, 'bold')) # increment
+            self.a_label.grid(row = 0, column = 0, padx=10)
+
+            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
+                                                   bd=2, fg="#193d6c")
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
-            self.proc_a_entry.grid(row = row, column = col)
-            col = 0
-            row += 1
+            self.proc_a_entry.grid(row = 0, column = 1)
+
+        fifth_frame = tk.Frame(self, bg="#ccddf3")
+        fifth_frame.pack(pady=10)
+
         if self.proc_edit_mode:
-            self.save_button = tk.Button(self, text = "Save", command = self.save_processing_unit)
-            self.save_button.grid(row = row, column = col, padx=10, pady=10)
+            self.save_button = tk.Button(fifth_frame, text = "SAVE", command = self.save_processing_unit, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.save_button.grid(row=0, column=0, padx=10, pady=10)
         else:
-            self.proc_add_button = tk.Button(self, text="Add", command=self.add_processing_unit)
-            self.proc_add_button.grid(row = row, column = col, padx=10, pady=10)
-        row += 1
-        return row, col
+            self.proc_add_button = tk.Button(fifth_frame, text="ADD", command=self.add_processing_unit, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.proc_add_button.grid(row=0, column=1, padx=10, pady=10)
+
+
 
     def choose_processor(self, event):
         if self.processor_choice.get() != '':
@@ -478,39 +550,52 @@ class MainApp(tk.Tk):
     def processors_choice_widget(self, event = None):
         self.clear_window()
 
-        current_row, current_col = 0, 0
+        proc_title_label = tk.Label(self, text="GENERATE PROCESSORS AND PROCESSOR'S SETTINGS", bg="#ccddf3",
+                                   fg="#193d6c",
+                                   font=('Times', 14, 'bold'))
+        proc_title_label.pack(pady=30)
 
-        proc_label = tk.Label(self, text="Choose processing units")
-        proc_label.grid(row = current_row)
-        current_row += 1
+        first_frame = tk.Frame(self, bg="#ccddf3")
+        first_frame.pack(pady=20)
+
+        proc_label = tk.Label(first_frame, text="Choose processing units", bg="#ccddf3", fg="#193d6c",
+                              font=('Times', 14, 'bold'))
+        proc_label.grid(row=0, column=0)
+
 
         processors = self.qsystem.get_processors()
         options = [x.get_name() for x in processors]
-        self.processor_choice = ttk.Combobox(self, values=options, textvariable=self.selected_processor)
-        self.processor_choice.grid(row = current_row, column = current_col, padx=10, pady=10)
-        current_col += 1
+        self.processor_choice = ttk.Combobox(first_frame, values=options, textvariable=self.selected_processor,  width=28, background="#ccddf3", foreground="#193d6c",
+                                             font=('Times', 14, 'bold'))
+        self.processor_choice.grid(row=0, column=1, padx=10, pady=10)
         self.processor_choice.bind("<<ComboboxSelected>>", self.choose_processor)
         
         # Create a Delete button
-        self.proc_delete_button = tk.Button(self, text="Delete", command = self.delete_processing_unit)
-        self.proc_delete_button.grid(row = current_row, column = current_col, padx=10, pady=10)
-        current_col += 1
+        self.proc_delete_button = tk.Button(first_frame, text="DELETE", command = self.delete_processing_unit, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.proc_delete_button.grid(row=1, column=0, padx=10, pady=10)
 
         # Create form reset button
-        self.proc_new_button = tk.Button(self, text="Clear", command = self.soft_reset_processor_values)
-        self.proc_new_button.grid(row = current_row, column = current_col, padx=10, pady=10)
-        current_col = 0  
-        current_row += 1
+        self.proc_new_button = tk.Button(first_frame, text="CLEAR", command = self.soft_reset_processor_values, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.proc_new_button.grid(row=1, column=1, padx=10, pady=10)
 
-        current_row, current_col = self.display_processor_entry(current_row, current_col)
+
+        self.display_processor_entry()
+
+
+        button_frame = tk.Frame(self, bg="#ccddf3")
+        button_frame.pack(pady=10)
+
 
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(self, text="Back", command=self.generators_choice_widget)
-        self.back_button.grid(row = current_row, column = current_col, padx=20, pady=20)
-        current_col += 1
+        self.back_button = tk.Button(button_frame, text="BACK", command=self.generators_choice_widget, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button.grid(row=0, column=0, padx=20, pady=20)
         
-        self.submit_button = tk.Button(self, text="Submit", command = lambda: self.create_simulation_widget(isMetamodel=False))
-        self.submit_button.grid(row = current_row, column = current_col, padx=20, pady=20)
+        self.submit_button = tk.Button(button_frame, text="SUBMIT", command = lambda: self.create_simulation_widget(isMetamodel=False), foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.submit_button.grid(row=0, column=1, padx=20, pady=20)
 
     def simulate(self):
         self.qsystem.simulate()
@@ -521,7 +606,7 @@ class MainApp(tk.Tk):
         for arg in args:
             tree.heading(arg, text=arg)
 
-        # Add the table to the frame with a vertical scrollbar
+        #Add the table to the frame with a vertical scrollbar
         vsb = ttk.Scrollbar(table_frame, orient="vertical", command=tree.yview)
         tree.configure(yscrollcommand=vsb.set)
         vsb.pack(side='right', fill='y')
@@ -557,10 +642,12 @@ class MainApp(tk.Tk):
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
-            self.back_button = tk.Button(self, text="Back", command=self.start)
+            self.back_button = tk.Button(self, text="Back", command=self.start, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
             
-            self.next_button = tk.Button(self, text="Simulate", command=self.simulate)
+            self.next_button = tk.Button(self, text="Simulate", command=self.simulate, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
         else:
             table_frame = tk.Frame(self)
@@ -570,10 +657,12 @@ class MainApp(tk.Tk):
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
-            self.back_button = tk.Button(self, text="Back", command = self.processors_choice_widget)
+            self.back_button = tk.Button(self, text="Back", command = self.processors_choice_widget, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
             
-            self.next_button = tk.Button(self, text="Simulate", command=self.simulate)
+            self.next_button = tk.Button(self, text="Simulate", command=self.simulate, foreground='#F5F5F5',
+                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
     def load_model(self):
