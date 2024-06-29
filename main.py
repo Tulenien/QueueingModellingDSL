@@ -609,7 +609,6 @@ class MainApp(tk.Tk):
         self.qsystem.simulate()
 
     def create_table(self, table_frame, *args):
-
         tree = ttk.Treeview(table_frame, columns=(args), show='headings')
         for arg in args:
             tree.heading(arg, text=arg)
@@ -642,34 +641,34 @@ class MainApp(tk.Tk):
                          font=('Times', 10, 'bold'))
             self.file_path_label.pack(fill=tk.BOTH, pady=10)
 
-            table_frame = tk.Frame(self)
-            table_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+            table_frame = tk.Frame(self, height=50)
+            table_frame.pack(expand=True, padx=20)
 
             self.tree = self.create_table(table_frame, "name", "type", "distribution", "distribution args")
 
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
-            self.back_button = tk.Button(self, text="Back", command=self.start, foreground='#F5F5F5',
+            self.back_button = tk.Button(self, text="BACK", command=self.start, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
             
-            self.next_button = tk.Button(self, text="Simulate", command=self.simulate, foreground='#F5F5F5',
+            self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
         else:
-            table_frame = tk.Frame(self)
-            table_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+            table_frame = tk.Frame(self, height=300)
+            table_frame.pack( expand=True, padx=20)
 
             self.tree = self.create_table(table_frame, "name", "type", "distribution", "distribution args")
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
-            self.back_button = tk.Button(self, text="Back", command = self.processors_choice_widget, foreground='#F5F5F5',
+            self.back_button = tk.Button(self, text="BACK", command = self.processors_choice_widget, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
             
-            self.next_button = tk.Button(self, text="Simulate", command=self.simulate, foreground='#F5F5F5',
+            self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
