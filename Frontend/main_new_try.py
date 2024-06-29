@@ -85,6 +85,16 @@ class MainApp(tk.Tk):
         self.use_cached_model_button.pack(pady=15)
 
 
+        if self.model_file_path:
+            self.file_path_label = tk.Label(self, text=f"Selected model file: {self.model_file_path}", bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 10, 'bold'))
+            self.file_path_label.pack(pady=15)
+        if self.metamodel_file_path:
+            self.metamodel_path_label = tk.Label(self, text=f"Selected metamodel file: {self.metamodel_file_path}", bg="#ccddf3", fg="#193d6c",
+                         font=('Times', 10, 'bold'))
+            self.metamodel_path_label.pack()
+
+
     def display_system_constraints_entry(self, frame):
         choice = self.selected_system_type.get()
         if choice == 'timed':
