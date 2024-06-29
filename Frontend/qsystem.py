@@ -18,9 +18,9 @@ class QSystem:
         self.system_modules[QSystem.INF_SOURCE] = []
         self.system_modules[QSystem.PROCESSOR] = []
         self.delta = QSystem.DELTA
-        self.time_constraint = 0.0
+        self.time_constraint = 10
         self.requests_constraint = 0
-        self.isTimed = False
+        self.isTimed = True
         self.global_time = 0.0
         self.statistics = Statistics(QSystem.STAT_DELTA)
     
