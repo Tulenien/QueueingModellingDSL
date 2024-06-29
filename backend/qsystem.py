@@ -1,8 +1,8 @@
-from statistics import *
-from distribution import *
-from information_source import *
-from processing_unit import *
-import request
+from backend.statistics import *
+from backend.distribution import *
+from backend.information_source import *
+from backend.processing_unit import *
+import backend.request
 
 class QSystem:
     INF_SOURCE = "INF_SOURCE"

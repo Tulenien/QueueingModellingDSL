@@ -1,4 +1,4 @@
-from request import Request
+from backend.request import Request
 
 class InformationSource:
     def __init__(self, random_generator, name):

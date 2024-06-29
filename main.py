@@ -2,10 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 import os
 from tkinter import filedialog, messagebox
-from qsystem import QSystem
-from qmodel import QModel
-from distribution import Distributions, RandomGenerator
-
+from backend.qsystem import QSystem
+from backend.qmodel import QModel
+from backend.distribution import Distributions, RandomGenerator
 
 class MainApp(tk.Tk):
     DEFAULT_GEN_NAME = "G"
@@ -24,9 +23,8 @@ class MainApp(tk.Tk):
         self.metamodel_file_path = None
 
         this_folder = os.path.dirname(__file__)
-        self.model_file_path = os.path.join(this_folder, 'program.qs')
-        self.metamodel_file_path = os.path.join(this_folder, 'qsystem.tx')
-
+        self.model_file_path = os.path.join(this_folder, 'models/program.qs')
+        self.metamodel_file_path = os.path.join(this_folder, 'models/qsystem.tx')
 
         super().__init__()
         self.title("Main Window")

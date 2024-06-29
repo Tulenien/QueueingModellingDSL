@@ -1,6 +1,6 @@
 from os.path import dirname, join
-from model_exporter import *
-from model_reader import *
+from backend.model_exporter import *
+from backend.model_reader import *
 
 class QModel:
     def import_textx_model(self, metamodel_path, model_path, this_folder=dirname(__file__)):
