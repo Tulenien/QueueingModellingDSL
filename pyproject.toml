@@ -1,4 +1,5 @@
 [project]
+[tool.poetry]
 name = "qmodelling"
 version = "0.1.0"
 description = "DSL language for queue modelling"
