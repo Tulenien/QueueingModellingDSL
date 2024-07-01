@@ -21,9 +21,3 @@ def make_plot(x_data, y_data):
     # Show plot
     plt.show()
 
-if __name__ == "__main__":
-    # Data for plotting
-    x = [1, 2, 3, 4, 5]
-    y = [2, 4, 6, 8, 10]
-
-    make_plot(x, y)
