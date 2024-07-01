@@ -26,6 +26,5 @@ Repository = "https://github.com/Tulenien/QueueingModellingDSL.git"
 [tool.flit.module]
 name = "backend"
 
-[tool.flit.sdist]
-exclude = ["*/."]
+
 
