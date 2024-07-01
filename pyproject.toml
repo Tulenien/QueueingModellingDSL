@@ -1,0 +1,30 @@
+[project]
+name = "qmodelling"
+version = "0.1.0"
+description = "DSL language for queue modelling"
+authors = [
+    {name = "Timofey Evsigneev", email = "timofey.evsigneev@gmail.com"},
+    {name = "Tatjana Gavrilovic", email = "gavrilovic@uns.ac.rs"},
+]
+
+license = {text = "GNU GENERAL PUBLIC LICENSE"}
+keywords = ["queue-modelling", "language", "DSL"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+matplotlib = "^3.9.0"
+textx = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[project.urls]
+Repository = "https://github.com/Tulenien/QueueingModellingDSL.git"
+
+[tool.flit.module]
+name = "backend"
+
+
+

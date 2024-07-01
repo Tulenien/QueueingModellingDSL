@@ -1,0 +1,59 @@
+Program:
+  'begin'
+    commands*=Command    // = operator means zero or more matches.
+                         // commands will be
+                         // a list of Command objects
+
+  'end'
+;
+
+Command:
+  SetTimeConstraint | SetRequestConstraint | Generator | Processor | Statistics | Connect
+;
+
+Connection:
+  other=STRING
+;
+
+Connect:
+  'Connect' this=STRING connection*=Connection
+;
+
+SetTimeConstraint:
+  'SetTimeConstraint' number=INT
+;
+
+SetRequestConstraint:
+  'SetRequestConstraint' number=INT
+;
+
+Generator:
+  'Generator' distribution=Distribution name=STRING
+;
+
+Processor:
+  'Processor' distribution=Distribution name=STRING
+;
+
+Statistics:
+  'Statistics' type=Modules id=INT
+;
+
+Distribution:
+  name=DistributionNames args*=FLOAT | name=DistributionNames args*=INT
+;
+
+DistributionNames:
+  "normal" | "uniform" | "increment"
+;
+
+
+Modules:
+  "generator" | "processor"
+;
+
+// Special rule for comments.
+
+Comment:
+  /\/\/.*$/
+;
