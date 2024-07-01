@@ -10,7 +10,7 @@ class QModel:
         qsystem_mm = reader.read_metamodel(metamodel_path)
         qsystem_model = reader.read_model(model_path, qsystem_mm)
 
-        exporter.export_metamodel(join(this_folder, 'qsystem_meta.dot'), qsystem_mm)
-        exporter.export_model(join(this_folder, 'program.dot'), qsystem_model)
+        exporter.export_metamodel(join(this_folder, '..\models\qsystem_meta.dot'), qsystem_mm)
+        exporter.export_model(join(this_folder, '..\models\program.dot'), qsystem_model)
 
         return qsystem_model
