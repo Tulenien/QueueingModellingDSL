@@ -51,6 +51,23 @@ class MainApp(tk.Tk):
         self.start()
 
 
+    def check_parameters(self, func, *args):
+        flag = True
+        for arg in args:
+            flag &= func(arg)
+            if not flag:
+                break
+        return flag
+
+    def check_int_parameters(self, value):
+        if type(value) == "int":
+            return True
+        return False
+
+    def check_float_parameters(self, value):
+        if type(value) == "float":
+            return True
+        return False
 
     def center_window(self):
         self.update_idletasks()
@@ -74,7 +91,7 @@ class MainApp(tk.Tk):
         self.return_button = tk.Button(self, text="INPUT  MODEL  PARAMETERS", command=self.setup_system_widget, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'), width=30)
         self.return_button.pack(pady=15)
-        
+
         self.open_file_button = tk.Button(self, text="LOAD TEXTX MODEL", command=self.load_model, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'),  width=30)
         self.open_file_button.pack(pady=15)
@@ -164,12 +181,12 @@ class MainApp(tk.Tk):
         self.system_entry_frame.pack(pady=20)
 
         self.display_system_constraints_entry(self.system_entry_frame)
-        
+
         # Create 'Back' and 'Next' buttons
         self.back_button = tk.Button(self, text="BACK", command=self.start, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
         self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
-        
+
         self.submit_button = tk.Button(self, text="SUBMIT", command=self.submit_constraints_form, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
         self.submit_button.pack(side=tk.RIGHT, padx=20, pady=20)
@@ -179,19 +196,38 @@ class MainApp(tk.Tk):
         distribution_name = self.selected_random_generator.get()
         self.gen_name = self.gen_entry_name.get()
         args = []
+        flag = True
         if distribution_name == "normal":
             self.gen_a = self.gen_a_entry.get()
             self.gen_b = self.gen_b_entry.get()
-            args.append(float(self.gen_a))
-            args.append(float(self.gen_b))
+            flag = self.check_parameters(self.check_float_parameters, self.gen_a, self.gen_b)
+            if flag:
+                args.append(float(self.gen_a))
+                args.append(float(self.gen_b))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.generators_choice_widget()
         elif distribution_name == "uniform":
             self.gen_a = self.gen_a_entry.get()
             self.gen_b = self.gen_b_entry.get()
-            args.append(int(self.gen_a))
-            args.append(int(self.gen_b))
+            flag = self.check_parameters(self.check_int_parameters, self.gen_a, self.gen_b)
+            if flag:
+                args.append(int(self.gen_a))
+                args.append(int(self.gen_b))
+            else:
+                # TODO: Make sure that args are not stored after invalid input!!!
+                # args.append(self.gen_a)
+                # args.append(self.gen_b)
+                self.info_box("Input has to be integer", "WARNING")
+                self.generators_choice_widget()
         elif distribution_name == "increment":
             self.gen_a = self.gen_a_entry.get()
-            args.append(float(self.gen_a))
+            flag = self.check_parameters(self.check_float_parameters, self.gen_a)
+            if flag:
+                args.append(float(self.gen_a))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.generators_choice_widget()
         function = Distributions.get_distribution(distribution_name)
         generator = RandomGenerator(function, args, distribution_name)
         self.qsystem.add_information_source(generator, self.gen_name)
@@ -245,7 +281,7 @@ class MainApp(tk.Tk):
                     elif distribution == "increment":
                         self.gen_a = rg.get_distribution_args()[0]
                     self.gen_name = generator_name
-                    break        
+                    break
         rg_choice = self.selected_random_generator.get()
 
         second_frame = tk.Frame(self, bg="#ccddf3")
@@ -392,19 +428,35 @@ class MainApp(tk.Tk):
         distribution_name = self.selected_random_generator.get()
         self.proc_name = self.proc_entry_name.get()
         args = []
+        flag = True
         if distribution_name == "normal":
             self.proc_a = self.proc_a_entry.get()
             self.proc_b = self.proc_b_entry.get()
-            args.append(float(self.proc_a))
-            args.append(float(self.proc_b))
+            flag = self.check_parameters(self.check_float_parameters, self.proc_a, self.proc_b)
+            if flag:
+                args.append(float(self.proc_a))
+                args.append(float(self.proc_b))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.processors_choice_widget()
         elif distribution_name == "uniform":
             self.proc_a = self.proc_a_entry.get()
             self.proc_b = self.proc_b_entry.get()
-            args.append(int(self.proc_a))
-            args.append(int(self.proc_b))
+            flag = self.check_parameters(self.check_int_parameters, self.proc_a, self.proc_b)
+            if flag:
+                args.append(int(self.proc_a))
+                args.append(int(self.proc_b))
+            else:
+                self.info_box("Input has to be int", "WARNING")
+                self.processors_choice_widget()
         elif distribution_name == "increment":
             self.proc_a = self.proc_a_entry.get()
-            args.append(float(self.proc_a))
+            flag = self.check_parameters(self.check_float_parameters, self.proc_a)
+            if flag:
+                args.append(float(self.proc_a))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.processors_choice_widget()
         function = Distributions.get_distribution(distribution_name)
         generator = RandomGenerator(function, args, distribution_name)
         self.qsystem.add_processing_unit(generator, self.proc_name)
@@ -578,7 +630,7 @@ class MainApp(tk.Tk):
                                              font=('Times', 14, 'bold'))
         self.processor_choice.grid(row=0, column=1, padx=10, pady=10)
         self.processor_choice.bind("<<ComboboxSelected>>", self.choose_processor)
-        
+
         # Create a Delete button
         self.proc_delete_button = tk.Button(first_frame, text="DELETE", command = self.delete_processing_unit, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
@@ -601,7 +653,7 @@ class MainApp(tk.Tk):
         self.back_button = tk.Button(button_frame, text="BACK", command=self.generators_choice_widget, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
         self.back_button.grid(row=0, column=0, padx=20, pady=20)
-        
+
         self.submit_button = tk.Button(button_frame, text="SUBMIT", command = lambda: self.create_simulation_widget(isMetamodel=False), foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
         self.submit_button.grid(row=0, column=1, padx=20, pady=20)
@@ -633,7 +685,7 @@ class MainApp(tk.Tk):
         for proc in processors:
             rg = proc.get_random_generator()
             table.insert('', tk.END, values=(proc.get_name(), "Processor", rg.get_distribution(), rg.get_distribution_args()))
-    
+
     def create_simulation_widget(self, isMetamodel=True):
         self.clear_window()
         if (isMetamodel and self.model_file_path and self.metamodel_file_path and self.model_file_path != '' and self.metamodel_file_path != ''):
@@ -655,7 +707,7 @@ class MainApp(tk.Tk):
             self.back_button = tk.Button(self, text="BACK", command=self.start, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
-            
+
             self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
@@ -670,7 +722,7 @@ class MainApp(tk.Tk):
             self.back_button = tk.Button(self, text="BACK", command = self.processors_choice_widget, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
-            
+
             self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
@@ -749,7 +801,7 @@ class MainApp(tk.Tk):
     def handle_file_path(self, file_path):
         # Handle the file path as needed
         print(f"File path selected: {file_path}")
-    
+
     def info_box(self, text, title="Info"):
         # Implement the action for the 'Next' button
         messagebox.showinfo(title, text)
