@@ -23,10 +23,12 @@ class QSystem:
         self.isTimed = True
         self.global_time = 0.0
         self.statistics = Statistics(QSystem.STAT_DELTA)
+        self.requests = []
     
     def soft_reset(self):
         generators = self.get_generators()
         processors = self.get_processors()
+        self.requests = []
         for gen in generators:
             gen.reset()
         for proc in processors:
@@ -148,7 +150,8 @@ class QSystem:
             self.handle_information_sources(requests)
             self.handle_processing_units(requests, finished_requests)
 
-        self.log_requests(finished_requests)
+        self.requests=finished_requests
+
 
     def requests_simulation(self):
         processed_requests = 0
@@ -162,7 +165,7 @@ class QSystem:
             self.handle_information_sources(requests)
             processed_requests += self.handle_processing_units(requests, finished_requests)
 
-        self.log_requests(finished_requests)
+        self.requests = finished_requests
 
     def simulate(self):
         self.soft_reset()
@@ -171,6 +174,7 @@ class QSystem:
         else:
             self.requests_simulation()
         print("simulation finished!")
+        return self.requests
 
     def log_requests(self, requests):
         for r in requests:

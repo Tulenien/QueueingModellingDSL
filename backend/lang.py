@@ -1,5 +1,4 @@
 from textx import LanguageDesc
-# Import submodules
 from os.path import join, dirname
 from backend import TextxModelExporter
 
@@ -11,7 +10,7 @@ def entity_metamodel():
     return data
 
 
-entity_lang = LanguageDesc('QModelling',
+qmodelling_lang = LanguageDesc('QModelling',
                            pattern='*.qs',
                            description='Queue modelling DSL',
                            metamodel=entity_metamodel)

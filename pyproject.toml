@@ -20,7 +20,7 @@ dependencies = [
 ]
 
 [project.entry-points.textx_languages]
-entity = "backend.lang:entity_lang"
+qmodelling = "backend.lang:qmodelling_lang"
 
 [build-system]
 build-backend = "flit_core.buildapi"

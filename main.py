@@ -21,6 +21,7 @@ class MainApp(tk.Tk):
         self.qmodel = QModel()
         self.model_file_path = None
         self.metamodel_file_path = None
+        self.requests = []
 
         this_folder = os.path.dirname(__file__)
         self.model_file_path = os.path.join(this_folder, 'models/program.qs')
@@ -606,7 +607,9 @@ class MainApp(tk.Tk):
         self.submit_button.grid(row=0, column=1, padx=20, pady=20)
 
     def simulate(self):
-        self.qsystem.simulate()
+        self.requests = self.qsystem.simulate()
+        self.qsystem.log_requests(self.requests)
+        self.create_results_widget()
 
     def create_table(self, table_frame, *args):
         tree = ttk.Treeview(table_frame, columns=(args), show='headings')
@@ -671,6 +674,29 @@ class MainApp(tk.Tk):
             self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
+
+    def create_results_widget(self):
+        self.clear_window()
+
+        table_frame = tk.Frame(self, height=50)
+        table_frame.pack(expand=True, padx=20)
+
+        self.tree = self.create_table(table_frame, "name", "gen_time", "proc_time")
+        self.populate_results_table(self.tree)
+        # Create 'Back' and 'Next' buttons
+        self.back_button = tk.Button(self, text="BACK", command=self.create_simulation_widget, foreground='#F5F5F5',
+                                     background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
+        self.next_button = tk.Button(self, text="MAIN MENU", command=self.start, foreground='#F5F5F5',
+                                     background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
+
+    def populate_results_table(self,table):
+        for r in self.requests:
+            proc_time = str(round(r.get_finish_processing_time() - r.get_start_processing_time(), 5))
+            gen_time_rounded = str(round(r.get_generation_time(),5))
+            table.insert('', tk.END,
+                         values=(r.get_name(),gen_time_rounded , proc_time))
 
     def load_model(self):
         self.frame_for_selected_files = tk.Frame(self, width=800, height=500, bg="#ccddf3")
