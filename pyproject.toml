@@ -5,6 +5,7 @@ description = "DSL language for queue modelling"
 authors = [
     {name = "Timofey Evsigneev", email = "timofey.evsigneev@gmail.com"},
     {name = "Tatjana Gavrilovic", email = "gavrilovic@uns.ac.rs"},
+    {name = "Nemanja Vojinovic", email = "nemanja.srbobran@gmail.com"},
 ]
 
 license = {text = "GNU GENERAL PUBLIC LICENSE"}
