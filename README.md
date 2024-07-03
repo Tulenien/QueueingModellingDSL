@@ -34,3 +34,41 @@ The `Processor` constitutes the central component of the Q-system, responsible f
 
 ## Example of Q-system
 ![image](https://github.com/Tulenien/QueueingModellingDSL/blob/master/queue_model_example.png)
+
+
+## Installation
+
+1. Clone this project from [the repository](https://github.com/Tulenien/QueueingModellingDSL.git).:
+
+```bash
+git clone https://github.com/Tulenien/QueueingModellingDSL.git
+```
+
+2. Create python virtual environment:
+
+```bash
+python -m venv venv
+```
+
+3. Activate the virtual environment:
+
+- Windows
+```bash
+.\venv\Scripts\activate.bat
+```
+- Unix/Linux, Mac
+```bash
+source ./venv/bin/activate
+```
+
+4. Install all the dependencies with pip:
+
+```python
+pip install git+https://github.com/Tulenien/QueueingModellingDSL.git
+```
+
+5. Launch with GUI:
+
+```python
+python main.py
+```
