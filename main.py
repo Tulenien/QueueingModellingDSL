@@ -5,6 +5,7 @@ from tkinter import filedialog, messagebox
 from backend.qsystem import QSystem
 from backend.qmodel import QModel
 from backend.distribution import Distributions, RandomGenerator
+import re
 
 class MainApp(tk.Tk):
     DEFAULT_GEN_NAME = "G"
@@ -59,13 +60,17 @@ class MainApp(tk.Tk):
                 break
         return flag
 
-    def check_int_parameters(self, value):
-        if type(value) == "int":
+
+
+
+    def check_int_parameters(self, user_input):
+        if user_input.isdigit() or (user_input.startswith('-') and user_input[1:].isdigit()):
             return True
         return False
 
-    def check_float_parameters(self, value):
-        if type(value) == "float":
+    def check_float_parameters(self, user_input):
+        float_regex = re.compile(r'^-?\d+(?:\.\d+)?$')
+        if float_regex.match(user_input):
             return True
         return False
 
@@ -215,9 +220,6 @@ class MainApp(tk.Tk):
                 args.append(int(self.gen_a))
                 args.append(int(self.gen_b))
             else:
-                # TODO: Make sure that args are not stored after invalid input!!!
-                # args.append(self.gen_a)
-                # args.append(self.gen_b)
                 self.info_box("Input has to be integer", "WARNING")
                 self.generators_choice_widget()
         elif distribution_name == "increment":
@@ -228,10 +230,11 @@ class MainApp(tk.Tk):
             else:
                 self.info_box("Input has to be float", "WARNING")
                 self.generators_choice_widget()
-        function = Distributions.get_distribution(distribution_name)
-        generator = RandomGenerator(function, args, distribution_name)
-        self.qsystem.add_information_source(generator, self.gen_name)
-        self.soft_reset_generator_values()
+        if flag:
+            function = Distributions.get_distribution(distribution_name)
+            generator = RandomGenerator(function, args, distribution_name)
+            self.qsystem.add_information_source(generator, self.gen_name)
+            self.soft_reset_generator_values()
 
     def delete_information_source(self):
         self.qsystem.remove_information_source(self.selected_generator.get())
@@ -241,23 +244,40 @@ class MainApp(tk.Tk):
         distribution_name = self.selected_random_generator.get()
         self.gen_name = self.gen_entry_name.get()
         args = []
+        flag= True
         if distribution_name == "normal":
             self.gen_a = self.gen_a_entry.get()
             self.gen_b = self.gen_b_entry.get()
-            args.append(float(self.gen_a))
-            args.append(float(self.gen_b))
+            flag = self.check_parameters(self.check_float_parameters, self.gen_a, self.gen_b)
+            if flag:
+                args.append(float(self.gen_a))
+                args.append(float(self.gen_b))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.generators_choice_widget()
         elif distribution_name == "uniform":
             self.gen_a = self.gen_a_entry.get()
             self.gen_b = self.gen_b_entry.get()
-            args.append(int(self.gen_a))
-            args.append(int(self.gen_b))
+            flag = self.check_parameters(self.check_int_parameters, self.gen_a, self.gen_b)
+            if flag:
+                args.append(int(self.gen_a))
+                args.append(int(self.gen_b))
+            else:
+                self.info_box("Input has to be integer", "WARNING")
+                self.generators_choice_widget()
         elif distribution_name == "increment":
             self.gen_a = self.gen_a_entry.get()
-            args.append(float(self.gen_a))
-        function = Distributions.get_distribution(distribution_name)
-        generator = RandomGenerator(function, args, distribution_name)
-        self.qsystem.add_information_source(generator, self.gen_name)
-        self.soft_reset_generator_values()
+            flag = self.check_parameters(self.check_float_parameters, self.gen_a)
+            if flag:
+                args.append(float(self.gen_a))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.generators_choice_widget()
+        if flag:
+            function = Distributions.get_distribution(distribution_name)
+            generator = RandomGenerator(function, args, distribution_name)
+            self.qsystem.add_information_source(generator, self.gen_name)
+            self.soft_reset_generator_values()
 
     def soft_reset_generator_values(self):
         self.gen_name = MainApp.DEFAULT_GEN_NAME
@@ -457,10 +477,11 @@ class MainApp(tk.Tk):
             else:
                 self.info_box("Input has to be float", "WARNING")
                 self.processors_choice_widget()
-        function = Distributions.get_distribution(distribution_name)
-        generator = RandomGenerator(function, args, distribution_name)
-        self.qsystem.add_processing_unit(generator, self.proc_name)
-        self.soft_reset_processor_values()
+        if flag:
+            function = Distributions.get_distribution(distribution_name)
+            generator = RandomGenerator(function, args, distribution_name)
+            self.qsystem.add_processing_unit(generator, self.proc_name)
+            self.soft_reset_processor_values()
 
     def delete_processing_unit(self):
         self.qsystem.remove_processing_unit(self.selected_processor.get())
@@ -470,23 +491,40 @@ class MainApp(tk.Tk):
         distribution_name = self.selected_random_generator.get()
         self.proc_name = self.proc_entry_name.get()
         args = []
+        flag = True
         if distribution_name == "normal":
             self.proc_a = self.proc_a_entry.get()
             self.proc_b = self.proc_b_entry.get()
-            args.append(float(self.proc_a))
-            args.append(float(self.proc_b))
+            flag = self.check_parameters(self.check_float_parameters, self.proc_a, self.proc_b)
+            if flag:
+                args.append(float(self.proc_a))
+                args.append(float(self.proc_b))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.processors_choice_widget()
         elif distribution_name == "uniform":
             self.proc_a = self.proc_a_entry.get()
             self.proc_b = self.proc_b_entry.get()
-            args.append(int(self.proc_a))
-            args.append(int(self.proc_b))
+            flag = self.check_parameters(self.check_int_parameters, self.proc_a, self.proc_b)
+            if flag:
+                args.append(int(self.proc_a))
+                args.append(int(self.proc_b))
+            else:
+                self.info_box("Input has to be int", "WARNING")
+                self.processors_choice_widget()
         elif distribution_name == "increment":
             self.proc_a = self.proc_a_entry.get()
-            args.append(float(self.proc_a))
-        function = Distributions.get_distribution(distribution_name)
-        generator = RandomGenerator(function, args, distribution_name)
-        self.qsystem.add_processing_unit(generator, self.proc_name)
-        self.soft_reset_processor_values()
+            flag = self.check_parameters(self.check_float_parameters, self.proc_a)
+            if flag:
+                args.append(float(self.proc_a))
+            else:
+                self.info_box("Input has to be float", "WARNING")
+                self.processors_choice_widget()
+        if flag:
+            function = Distributions.get_distribution(distribution_name)
+            generator = RandomGenerator(function, args, distribution_name)
+            self.qsystem.add_processing_unit(generator, self.proc_name)
+            self.soft_reset_processor_values()
 
     def soft_reset_processor_values(self):
         self.proc_name = MainApp.DEFAULT_PROC_NAME
