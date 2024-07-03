@@ -7,6 +7,7 @@ from backend.qmodel import QModel
 from backend.distribution import Distributions, RandomGenerator
 
 class MainApp(tk.Tk):
+    # QModelling Defaults
     DEFAULT_GEN_NAME = "G"
     DEFAULT_PROC_NAME = "P"
     DEFAULT_A_PARAM = 1
@@ -15,6 +16,16 @@ class MainApp(tk.Tk):
     DEFAULT_SELECTED_ST = "timed"
     DEFAULT_SELECTED_GEN = ""
     DEFAULT_SELECTED_PROC = ""
+
+    # GUI Defaults
+    BACKGROUND_LABEL_COLOR = "#CCDDF3"
+    FOREGROUND_LABEL_COLOR = "#193D6C"
+    FOREGROUND_BUTTON_COLOR = "#F5F5F5"
+    BACKGROND_BUTTON_COLOR = "#193D6C"
+    
+    FONT_ENTRIES = ("Times", 14, "bold")
+    FONT_REGULAR = ("Times", 12, "bold")
+    FONT_LABEL = ("Times", 10, "bold")
 
     def __init__(self):
         self.qsystem = QSystem()
@@ -30,7 +41,7 @@ class MainApp(tk.Tk):
         super().__init__()
         self.title("Main Window")
         self.geometry("800x600")
-        self.configure(bg="#ccddf3")
+        self.configure(bg=MainApp.BACKGROUND_LABEL_COLOR)
         self.center_window()
         self.selected_system_type = tk.StringVar()
         self.selected_generator = tk.StringVar()
@@ -49,7 +60,6 @@ class MainApp(tk.Tk):
         self.gen_edit_mode = False
         self.proc_edit_mode = False
         self.start()
-
 
     def check_parameters(self, func, *args):
         flag = True
@@ -84,66 +94,66 @@ class MainApp(tk.Tk):
     def start(self):
         self.clear_window()
 
-        self.welcome_label = tk.Label(self, text="QUEUEING MODELLING DSL", bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold'))
+        self.welcome_label = tk.Label(self, text="QUEUEING MODELLING DSL", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES)
         self.welcome_label.pack(fill=tk.BOTH, pady=30)  # center label in frame
 
-        self.return_button = tk.Button(self, text="INPUT  MODEL  PARAMETERS", command=self.setup_system_widget, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'), width=30)
+        self.return_button = tk.Button(self, text="INPUT  MODEL  PARAMETERS", command=self.setup_system_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR, width=30)
         self.return_button.pack(pady=15)
 
-        self.open_file_button = tk.Button(self, text="LOAD TEXTX MODEL", command=self.load_model, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'),  width=30)
+        self.open_file_button = tk.Button(self, text="LOAD TEXTX MODEL", command=self.load_model, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR,  width=30)
         self.open_file_button.pack(pady=15)
 
-        self.use_cached_model_button = tk.Button(self, text="USE SAVED TEXTX MODEL", command=self.create_simulation_widget, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'),  width=30)
+        self.use_cached_model_button = tk.Button(self, text="USE SAVED TEXTX MODEL", command=self.create_simulation_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR,  width=30)
         self.use_cached_model_button.pack(pady=15)
 
 
         if self.model_file_path:
-            self.file_path_label = tk.Label(self, text=f"Selected model file: {self.model_file_path}", bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 10, 'bold'))
+            self.file_path_label = tk.Label(self, text=f"Selected model file: {self.model_file_path}", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_LABEL)
             self.file_path_label.pack(pady=15)
         if self.metamodel_file_path:
-            self.metamodel_path_label = tk.Label(self, text=f"Selected metamodel file: {self.metamodel_file_path}", bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 10, 'bold'))
+            self.metamodel_path_label = tk.Label(self, text=f"Selected metamodel file: {self.metamodel_file_path}", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_LABEL)
             self.metamodel_path_label.pack()
 
 
     def display_system_constraints_entry(self, frame):
         choice = self.selected_system_type.get()
         if choice == 'timed':
-            self.time_constraint_entry_label = tk.Label(frame, text="2. SYSTEM TIME CONSTRAINT", bg="#ccddf3",
-                                                        fg="#193d6c",
-                                                        font=('Times', 12, 'bold'))
+            self.time_constraint_entry_label = tk.Label(frame, text="2. SYSTEM TIME CONSTRAINT", bg=MainApp.BACKGROUND_LABEL_COLOR,
+                                                        fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                                        font=MainApp.FONT_REGULAR)
             self.time_constraint_entry_label.pack()
 
-            self.time_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.time_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.time_constraint_entry.insert(tk.END, str(self.qsystem.get_time_constraint()))
             self.time_constraint_entry.pack(pady=15)
 
         elif choice == 'requests':
             self.requests_constraint_entry_label = tk.Label(frame, text="2. SYSTEM REQUESTS NUMBER CONSTRAINT",
-                                                            bg="#ccddf3", fg="#193d6c",
-                                                            font=('Times', 12, 'bold'))
+                                                            bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                                            font=MainApp.FONT_REGULAR)
             self.requests_constraint_entry_label.pack()
-            self.requests_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.requests_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.requests_constraint_entry.insert(tk.END, str(self.qsystem.get_requests_constraint()))
             self.requests_constraint_entry.pack(pady=15)
 
         else:
-            self.time_constraint_entry_label = tk.Label(frame, text="2. SYSTEM TIME CONSTRAINT", bg="#ccddf3",
-                                                        fg="#193d6c",
-                                                        font=('Times', 12, 'bold'))
+            self.time_constraint_entry_label = tk.Label(frame, text="2. SYSTEM TIME CONSTRAINT", bg=MainApp.BACKGROUND_LABEL_COLOR,
+                                                        fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                                        font=MainApp.FONT_REGULAR)
             self.time_constraint_entry_label.pack()
-            self.time_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.time_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.time_constraint_entry.pack(pady=15)
 
-        self.delta_constraint_label = tk.Label(frame, text="3. SYSTEM TIME DELTA CONSTRAINT", bg="#ccddf3", fg="#193d6c",
-                                               font=('Times', 12, 'bold'))
+        self.delta_constraint_label = tk.Label(frame, text="3. SYSTEM TIME DELTA CONSTRAINT", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                               font=MainApp.FONT_REGULAR)
         self.delta_constraint_label.pack()
-        self.delta_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+        self.delta_constraint_entry = tk.Entry(frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
         self.delta_constraint_entry.insert(tk.END, str(self.qsystem.get_delta()))
         self.delta_constraint_entry.pack(pady=10)
 
@@ -163,32 +173,32 @@ class MainApp(tk.Tk):
     def setup_system_widget(self, event=None):
         self.clear_window()
 
-        self.system_widget_header = tk.Label(self, text="SYSTEM SETUP", bg="#ccddf3", fg="#193d6c",
-                                             font=('Times', 14, 'bold'))
+        self.system_widget_header = tk.Label(self, text="SYSTEM SETUP", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                             font=MainApp.FONT_ENTRIES)
         self.system_widget_header.pack(pady=30)
 
-        self.system_widget_header = tk.Label(self, text="1. CHOOSE SYSTEM CONSTRAINTS",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 12, 'bold'))
+        self.system_widget_header = tk.Label(self, text="1. CHOOSE SYSTEM CONSTRAINTS",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_REGULAR)
         self.system_widget_header.pack()
 
         options = ['timed', 'requests']
-        self.system_type_choice = ttk.Combobox(self, values=options, textvariable=self.selected_system_type, width=20, background="#ccddf3", foreground="#193d6c", font=('Times', 13, 'bold'))
+        self.system_type_choice = ttk.Combobox(self, values=options, textvariable=self.selected_system_type, width=20, background=MainApp.BACKGROUND_LABEL_COLOR, foreground=MainApp.FOREGROUND_LABEL_COLOR, font=('Times', 13, 'bold'))
         self.system_type_choice.pack(pady=10)
         self.system_type_choice.bind("<<ComboboxSelected>>", self.setup_system_widget)
 
         # Frame to hold the dynamic entry fields
-        self.system_entry_frame = tk.Frame(self, bg="#ccddf3")
+        self.system_entry_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         self.system_entry_frame.pack(pady=20)
 
         self.display_system_constraints_entry(self.system_entry_frame)
 
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(self, text="BACK", command=self.start, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button = tk.Button(self, text="BACK", command=self.start, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
 
-        self.submit_button = tk.Button(self, text="SUBMIT", command=self.submit_constraints_form, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.submit_button = tk.Button(self, text="SUBMIT", command=self.submit_constraints_form, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.submit_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
     def save_information_source(self):
@@ -284,86 +294,86 @@ class MainApp(tk.Tk):
                     break
         rg_choice = self.selected_random_generator.get()
 
-        second_frame = tk.Frame(self, bg="#ccddf3")
+        second_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         second_frame.pack(pady=10)
 
 
-        self.gen_entry_name_label = tk.Label(second_frame, text = "Enter information source name: ",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold'))
+        self.gen_entry_name_label = tk.Label(second_frame, text = "Enter information source name: ",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES)
         self.gen_entry_name_label.grid(row=0, column=0)
 
-        self.gen_entry_name = tk.Entry(second_frame, relief="sunken", width=20, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+        self.gen_entry_name = tk.Entry(second_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
         self.gen_entry_name.insert(tk.END, self.gen_name)
         self.gen_entry_name.grid(row=0, column=1)
 
-        third_frame = tk.Frame(self, bg="#ccddf3")
+        third_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         third_frame.pack(pady=10)
 
 
-        distribution_label = tk.Label(third_frame, text = "Choose distribution:",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold'))
+        distribution_label = tk.Label(third_frame, text = "Choose distribution:",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES)
         distribution_label.grid(row=0, column=0, padx=10)
 
         options = ['normal', 'uniform', 'increment']
-        self.distribution_cbox = ttk.Combobox(third_frame, values=options, textvariable=self.selected_random_generator, width=28, background="#ccddf3", foreground="#193d6c", font=('Times', 14, 'bold'))
+        self.distribution_cbox = ttk.Combobox(third_frame, values=options, textvariable=self.selected_random_generator, width=28, background=MainApp.BACKGROUND_LABEL_COLOR, foreground=MainApp.FOREGROUND_LABEL_COLOR, font=MainApp.FONT_ENTRIES)
         self.distribution_cbox.bind("<<ComboboxSelected>>", self.generators_choice_widget)
         self.distribution_cbox.grid(row=0, column=1)
 
-        fourth_frame = tk.Frame(self, bg="#ccddf3")
+        fourth_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         fourth_frame.pack(pady=10)
 
         if rg_choice == 'normal':
-            self.mu_label = tk.Label(fourth_frame, text="\u03bc",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # mu, mean
+            self.mu_label = tk.Label(fourth_frame, text="\u03bc",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # mu, mean
             self.mu_label.grid(row=0, column =0, padx=5)
 
-            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
             self.gen_a_entry.grid(row=0, column=1, padx=5)
 
-            self.sigma_label = tk.Label(fourth_frame, text="\u03C3",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # sigma, standard deviation
+            self.sigma_label = tk.Label(fourth_frame, text="\u03C3",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # sigma, standard deviation
             self.sigma_label.grid(row = 0, column = 2, padx=5)
 
-            self.gen_b_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.gen_b_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.gen_b_entry.insert(tk.END, str(self.gen_b))
             self.gen_b_entry.grid(row = 0, column = 3)
 
         elif rg_choice == 'uniform':
-            self.a_label = tk.Label(fourth_frame, text="a",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # a
+            self.a_label = tk.Label(fourth_frame, text="a",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # a
             self.a_label.grid(row = 0, column = 0, padx=10)
-            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
             self.gen_a_entry.grid(row = 0, column = 1, padx=5)
 
-            self.b_label = tk.Label(fourth_frame, text="b",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # b
+            self.b_label = tk.Label(fourth_frame, text="b",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # b
             self.b_label.grid(row= 0, column = 2, padx=10)
 
-            self.gen_b_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.gen_b_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.gen_b_entry.insert(tk.END, str(self.gen_b))
             self.gen_b_entry.grid(row = 0, column = 3,)
 
         elif rg_choice == 'increment':
-            self.a_label = tk.Label(fourth_frame, text="value", bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # increment
+            self.a_label = tk.Label(fourth_frame, text="value", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # increment
             self.a_label.grid(row = 0, column = 0, padx=10)
 
-            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=("Times", 14, 'bold'), bd=2, fg="#193d6c")
+            self.gen_a_entry = tk.Entry(fourth_frame, relief="sunken", width=15, font=MainApp.FONT_ENTRIES, bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.gen_a_entry.insert(tk.END, str(self.gen_a))
             self.gen_a_entry.grid(row = 0, column = 1)
 
-        fifth_frame = tk.Frame(self, bg="#ccddf3")
+        fifth_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         fifth_frame.pack(pady=10)
         if self.gen_edit_mode:
 
-            self.save_button = tk.Button(fifth_frame, text = "SAVE", command = self.save_information_source, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.save_button = tk.Button(fifth_frame, text = "SAVE", command = self.save_information_source, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.save_button.grid(row = 0, column = 0, padx=10, pady=10)
         else:
-            self.gen_add_button = tk.Button(fifth_frame, text="ADD", command=self.add_information_source, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.gen_add_button = tk.Button(fifth_frame, text="ADD", command=self.add_information_source, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.gen_add_button.grid(row = 0, column = 1, padx=10, pady=10)
 
 
@@ -375,51 +385,51 @@ class MainApp(tk.Tk):
     def generators_choice_widget(self, event = None):
         self.clear_window()
 
-        gen_title_label = tk.Label(self, text="GENERATE GENERATORS AND GENERATOR'S SETTINGS", bg="#ccddf3", fg="#193d6c",
-                             font=('Times', 14, 'bold'))
+        gen_title_label = tk.Label(self, text="GENERATE GENERATORS AND GENERATOR'S SETTINGS", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                             font=MainApp.FONT_ENTRIES)
         gen_title_label.pack(pady=30)
 
 
-        first_frame = tk.Frame(self, bg="#ccddf3")
+        first_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         first_frame.pack(pady=20)
 
 
-        gen_label = tk.Label(first_frame, text="Choose information sources", bg="#ccddf3", fg="#193d6c",
-                             font=('Times', 14, 'bold'))
+        gen_label = tk.Label(first_frame, text="Choose information sources", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                             font=MainApp.FONT_ENTRIES)
         gen_label.grid(row=0, column=0)
 
         #Create a generator combobox
         generators = self.qsystem.get_generators()
         options = [x.get_name() for x in generators]
-        self.generator_choice = ttk.Combobox(first_frame, values=options, textvariable=self.selected_generator, width=28, background="#ccddf3", foreground="#193d6c", font=('Times', 14, 'bold'))
+        self.generator_choice = ttk.Combobox(first_frame, values=options, textvariable=self.selected_generator, width=28, background=MainApp.BACKGROUND_LABEL_COLOR, foreground=MainApp.FOREGROUND_LABEL_COLOR, font=MainApp.FONT_ENTRIES)
         self.generator_choice.grid(row=0, column=1, padx=10, pady=10)
         self.generator_choice.bind("<<ComboboxSelected>>", self.choose_generator)
 
         # Create a Delete button
         self.gen_delete_button = tk.Button(first_frame, text="DELETE", command=self.delete_information_source,
-                                           foreground='#F5F5F5',
-                                           background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+                                           foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                                           background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.gen_delete_button.grid(row=1, column=0, padx=10, pady=10)
 
         # Create form reset button
         self.gen_new_button = tk.Button(first_frame, text="CLEAR", command=self.soft_reset_generator_values,
-                                        foreground='#F5F5F5',
-                                        background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+                                        foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                                        background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.gen_new_button.grid(row=1, column=1, padx=10, pady=10)
 
 
         self.display_generator_entry()
 
-        button_frame = tk.Frame(self, bg="#ccddf3")
+        button_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         button_frame.pack(pady=10)
 
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(button_frame, text="BACK", command=self.setup_system_widget, foreground='#F5F5F5',
-                                     background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button = tk.Button(button_frame, text="BACK", command=self.setup_system_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                                     background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.back_button.grid(row=0, column=0, padx=20, pady=20)
 
-        self.submit_button = tk.Button(button_frame, text="SUBMIT", command=self.processors_choice_widget, foreground='#F5F5F5',
-                                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.submit_button = tk.Button(button_frame, text="SUBMIT", command=self.processors_choice_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.submit_button.grid(row=0, column=1, padx=20, pady=20)
 
 
@@ -512,93 +522,93 @@ class MainApp(tk.Tk):
                     self.proc_name = processor_name
                     break
 
-        second_frame = tk.Frame(self, bg="#ccddf3")
+        second_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         second_frame.pack(pady=10)
 
         rg_choice = self.selected_random_generator.get()
-        self.proc_entry_name_label = tk.Label(second_frame, text = "Enter processor unit name: ",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold'))
+        self.proc_entry_name_label = tk.Label(second_frame, text = "Enter processor unit name: ",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES)
         self.proc_entry_name_label.grid(row=0, column=0)
 
-        self.proc_entry_name = tk.Entry(second_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
-                                                   bd=2, fg="#193d6c")
+        self.proc_entry_name = tk.Entry(second_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES,
+                                                   bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
         self.proc_entry_name.insert(tk.END, self.proc_name)
         self.proc_entry_name.grid(row=0, column=1)
 
-        third_frame = tk.Frame(self, bg="#ccddf3")
+        third_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         third_frame.pack(pady=10)
 
 
-        distribution_label = tk.Label(third_frame, text = "Choose distribution:",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold'))
+        distribution_label = tk.Label(third_frame, text = "Choose distribution:",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES)
         distribution_label.grid(row=0, column=0, padx=10)
 
         options = ['normal', 'uniform', 'increment']
         self.distribution_cbox = ttk.Combobox(third_frame, values=options, textvariable=self.selected_random_generator,  width=28,
-                                                          background="#ccddf3", foreground="#193d6c",
-                                                          font=('Times', 14, 'bold'))
+                                                          background=MainApp.BACKGROUND_LABEL_COLOR, foreground=MainApp.FOREGROUND_LABEL_COLOR,
+                                                          font=MainApp.FONT_ENTRIES)
         self.distribution_cbox.bind("<<ComboboxSelected>>", self.processors_choice_widget)
         self.distribution_cbox.grid(row=0, column=1)
 
-        fourth_frame = tk.Frame(self, bg="#ccddf3")
+        fourth_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         fourth_frame.pack(pady=10)
 
 
         if rg_choice == 'normal':
-            self.mu_label = tk.Label(fourth_frame, text="\u03bc",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # mu, mean
+            self.mu_label = tk.Label(fourth_frame, text="\u03bc",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # mu, mean
             self.mu_label.grid(row=0, column =0, padx=5)
 
-            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
-                                                   bd=2, fg="#193d6c")
+            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES,
+                                                   bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
             self.proc_a_entry.grid(row = 0, column = 1)
 
-            self.sigma_label = tk.Label(fourth_frame, text="\u03C3",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # sigma, standard deviation
+            self.sigma_label = tk.Label(fourth_frame, text="\u03C3",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # sigma, standard deviation
             self.sigma_label.grid(row=0, column=2, padx=5)
 
-            self.proc_b_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
-                                                   bd=2, fg="#193d6c")
+            self.proc_b_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES,
+                                                   bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.proc_b_entry.insert(tk.END, str(self.proc_b))
             self.proc_b_entry.grid(row=0, column=3)
 
         elif rg_choice == 'uniform':
-            self.a_label = tk.Label(fourth_frame, text="a",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # a
+            self.a_label = tk.Label(fourth_frame, text="a",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # a
             self.a_label.grid(row = 0, column = 0, padx=10)
-            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
-                                                   bd=2, fg="#193d6c")
+            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES,
+                                                   bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
             self.proc_a_entry.grid(row = 0, column = 1, padx=40)
-            self.b_label = tk.Label(fourth_frame, text="b",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # b
+            self.b_label = tk.Label(fourth_frame, text="b",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # b
             self.b_label.grid(row = 0, column = 2, padx=10)
-            self.proc_b_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
-                                                   bd=2, fg="#193d6c")
+            self.proc_b_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES,
+                                                   bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.proc_b_entry.insert(tk.END, str(self.proc_b))
             self.proc_b_entry.grid(row = 0, column = 3)
 
         elif rg_choice == 'increment':
-            self.a_label = tk.Label(fourth_frame, text="value",  bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 14, 'bold')) # increment
+            self.a_label = tk.Label(fourth_frame, text="value",  bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_ENTRIES) # increment
             self.a_label.grid(row = 0, column = 0, padx=10)
 
-            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=("Times", 14, 'bold'),
-                                                   bd=2, fg="#193d6c")
+            self.proc_a_entry = tk.Entry(fourth_frame, relief="sunken", width=20, font=MainApp.FONT_ENTRIES,
+                                                   bd=2, fg=MainApp.FOREGROUND_LABEL_COLOR)
             self.proc_a_entry.insert(tk.END, str(self.proc_a))
             self.proc_a_entry.grid(row = 0, column = 1)
 
-        fifth_frame = tk.Frame(self, bg="#ccddf3")
+        fifth_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         fifth_frame.pack(pady=10)
 
         if self.proc_edit_mode:
-            self.save_button = tk.Button(fifth_frame, text = "SAVE", command = self.save_processing_unit, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.save_button = tk.Button(fifth_frame, text = "SAVE", command = self.save_processing_unit, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.save_button.grid(row=0, column=0, padx=10, pady=10)
         else:
-            self.proc_add_button = tk.Button(fifth_frame, text="ADD", command=self.add_processing_unit, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.proc_add_button = tk.Button(fifth_frame, text="ADD", command=self.add_processing_unit, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.proc_add_button.grid(row=0, column=1, padx=10, pady=10)
 
 
@@ -611,51 +621,51 @@ class MainApp(tk.Tk):
     def processors_choice_widget(self, event = None):
         self.clear_window()
 
-        proc_title_label = tk.Label(self, text="GENERATE PROCESSORS AND PROCESSOR'S SETTINGS", bg="#ccddf3",
-                                   fg="#193d6c",
-                                   font=('Times', 14, 'bold'))
+        proc_title_label = tk.Label(self, text="GENERATE PROCESSORS AND PROCESSOR'S SETTINGS", bg=MainApp.BACKGROUND_LABEL_COLOR,
+                                   fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                   font=MainApp.FONT_ENTRIES)
         proc_title_label.pack(pady=30)
 
-        first_frame = tk.Frame(self, bg="#ccddf3")
+        first_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         first_frame.pack(pady=20)
 
-        proc_label = tk.Label(first_frame, text="Choose processing units", bg="#ccddf3", fg="#193d6c",
-                              font=('Times', 14, 'bold'))
+        proc_label = tk.Label(first_frame, text="Choose processing units", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                              font=MainApp.FONT_ENTRIES)
         proc_label.grid(row=0, column=0)
 
 
         processors = self.qsystem.get_processors()
         options = [x.get_name() for x in processors]
-        self.processor_choice = ttk.Combobox(first_frame, values=options, textvariable=self.selected_processor,  width=28, background="#ccddf3", foreground="#193d6c",
-                                             font=('Times', 14, 'bold'))
+        self.processor_choice = ttk.Combobox(first_frame, values=options, textvariable=self.selected_processor,  width=28, background=MainApp.BACKGROUND_LABEL_COLOR, foreground=MainApp.FOREGROUND_LABEL_COLOR,
+                                             font=MainApp.FONT_ENTRIES)
         self.processor_choice.grid(row=0, column=1, padx=10, pady=10)
         self.processor_choice.bind("<<ComboboxSelected>>", self.choose_processor)
 
         # Create a Delete button
-        self.proc_delete_button = tk.Button(first_frame, text="DELETE", command = self.delete_processing_unit, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.proc_delete_button = tk.Button(first_frame, text="DELETE", command = self.delete_processing_unit, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.proc_delete_button.grid(row=1, column=0, padx=10, pady=10)
 
         # Create form reset button
-        self.proc_new_button = tk.Button(first_frame, text="CLEAR", command = self.soft_reset_processor_values, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.proc_new_button = tk.Button(first_frame, text="CLEAR", command = self.soft_reset_processor_values, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.proc_new_button.grid(row=1, column=1, padx=10, pady=10)
 
 
         self.display_processor_entry()
 
 
-        button_frame = tk.Frame(self, bg="#ccddf3")
+        button_frame = tk.Frame(self, bg=MainApp.BACKGROUND_LABEL_COLOR)
         button_frame.pack(pady=10)
 
 
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(button_frame, text="BACK", command=self.generators_choice_widget, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button = tk.Button(button_frame, text="BACK", command=self.generators_choice_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.back_button.grid(row=0, column=0, padx=20, pady=20)
 
-        self.submit_button = tk.Button(button_frame, text="SUBMIT", command = lambda: self.create_simulation_widget(isMetamodel=False), foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.submit_button = tk.Button(button_frame, text="SUBMIT", command = lambda: self.create_simulation_widget(isMetamodel=False), foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.submit_button.grid(row=0, column=1, padx=20, pady=20)
 
     def simulate(self):
@@ -692,8 +702,8 @@ class MainApp(tk.Tk):
             self.model = self.qmodel.import_textx_model(self.metamodel_file_path, self.model_file_path)
             self.qsystem.interpret(self.model)
 
-            self.file_path_label = tk.Label(self, text=f"Using textx model: {self.model_file_path}", bg="#ccddf3", fg="#193d6c",
-                         font=('Times', 10, 'bold'))
+            self.file_path_label = tk.Label(self, text=f"Using textx model: {self.model_file_path}", bg=MainApp.BACKGROUND_LABEL_COLOR, fg=MainApp.FOREGROUND_LABEL_COLOR,
+                         font=MainApp.FONT_LABEL)
             self.file_path_label.pack(fill=tk.BOTH, pady=10)
 
             table_frame = tk.Frame(self, height=50)
@@ -704,12 +714,12 @@ class MainApp(tk.Tk):
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
-            self.back_button = tk.Button(self, text="BACK", command=self.start, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.back_button = tk.Button(self, text="BACK", command=self.start, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
 
-            self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
         else:
             table_frame = tk.Frame(self, height=300)
@@ -719,12 +729,12 @@ class MainApp(tk.Tk):
             self.populate_modules_table(self.tree)
 
             # Create 'Back' and 'Next' buttons
-            self.back_button = tk.Button(self, text="BACK", command = self.processors_choice_widget, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.back_button = tk.Button(self, text="BACK", command = self.processors_choice_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
 
-            self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground='#F5F5F5',
-                       background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+            self.next_button = tk.Button(self, text="SIMULATE", command=self.simulate, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                       background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
             self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
     def create_results_widget(self):
@@ -736,11 +746,11 @@ class MainApp(tk.Tk):
         self.tree = self.create_table(table_frame, "name", "gen_time", "proc_time")
         self.populate_results_table(self.tree)
         # Create 'Back' and 'Next' buttons
-        self.back_button = tk.Button(self, text="BACK", command=self.create_simulation_widget, foreground='#F5F5F5',
-                                     background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.back_button = tk.Button(self, text="BACK", command=self.create_simulation_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                                     background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
-        self.next_button = tk.Button(self, text="MAIN MENU", command=self.start, foreground='#F5F5F5',
-                                     background='#193d6c', relief='raised', font=('Times', 12, 'bold'))
+        self.next_button = tk.Button(self, text="MAIN MENU", command=self.start, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
+                                     background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
         self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
 
     def populate_results_table(self,table):
@@ -751,7 +761,7 @@ class MainApp(tk.Tk):
                          values=(r.get_name(),gen_time_rounded , proc_time))
 
     def load_model(self):
-        self.frame_for_selected_files = tk.Frame(self, width=800, height=500, bg="#ccddf3")
+        self.frame_for_selected_files = tk.Frame(self, width=800, height=500, bg=MainApp.BACKGROUND_LABEL_COLOR)
         self.frame_for_selected_files.pack(pady=10)
 
         model_path = filedialog.askopenfilename(
@@ -764,14 +774,14 @@ class MainApp(tk.Tk):
             self.model_file_path = model_path
 
             if self.model_file_path:
-                self.chosen_file_label = tk.Label(self.frame_for_selected_files, text="Chosen files:", bg="#ccddf3",
-                                                  fg="#193d6c",
-                                                  font=('Times', 12, 'bold'))
+                self.chosen_file_label = tk.Label(self.frame_for_selected_files, text="Chosen files:", bg=MainApp.BACKGROUND_LABEL_COLOR,
+                                                  fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                                  font=MainApp.FONT_REGULAR)
                 self.chosen_file_label.pack(fill=tk.BOTH, pady=10)
 
-                self.file_path_label = tk.Label(self.frame_for_selected_files, text=f"Selected model file: {self.model_file_path}", bg="#ccddf3",
-                                                  fg="#193d6c",
-                                                  font=('Times', 10, 'bold'))
+                self.file_path_label = tk.Label(self.frame_for_selected_files, text=f"Selected model file: {self.model_file_path}", bg=MainApp.BACKGROUND_LABEL_COLOR,
+                                                  fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                                  font=MainApp.FONT_LABEL)
                 self.file_path_label.pack(pady=5)
 
 
@@ -786,9 +796,9 @@ class MainApp(tk.Tk):
 
                 if self.metamodel_file_path:
                     self.metamodel_path_label = tk.Label(self.frame_for_selected_files,
-                                                         text=f"Selected metamodel file: {self.metamodel_file_path}", bg="#ccddf3",
-                                                  fg="#193d6c",
-                                                  font=('Times', 10, 'bold'))
+                                                         text=f"Selected metamodel file: {self.metamodel_file_path}", bg=MainApp.BACKGROUND_LABEL_COLOR,
+                                                  fg=MainApp.FOREGROUND_LABEL_COLOR,
+                                                  font=MainApp.FONT_LABEL)
                     self.metamodel_path_label.pack(pady=5)
                     self.update()
                     self.after(2000, self.create_simulation_widget())
