@@ -667,10 +667,10 @@ class MainApp(tk.Tk):
         self.create_standard_button("BACK", self.generators_choice_widget, frame=button_frame).grid(row=0, column=0, padx=20, pady=20)
         self.create_standard_button("SUBMIT", lambda: self.create_simulation_widget(isMetamodel=False), frame=button_frame).grid(row=0, column=1, padx=20, pady=20)
 
-    def simulate(self):
+    def simulate(self, isMetamodel = True):
         self.requests = self.qsystem.simulate()
         self.qsystem.log_requests(self.requests)
-        self.create_results_widget()
+        self.create_results_widget(isMetamodel=isMetamodel)
 
     def create_table(self, table_frame, *args):
         tree = ttk.Treeview(table_frame, columns=(args), show='headings')
@@ -720,7 +720,7 @@ class MainApp(tk.Tk):
             self.populate_modules_table(self.tree)
 
             self.create_standard_button("BACK", self.processors_choice_widget).pack(side=tk.LEFT, padx=20, pady=20)
-        self.create_standard_button("SIMULATE", self.simulate).pack(side=tk.RIGHT, padx=20, pady=20)
+        self.create_standard_button("SIMULATE", lambda: self.simulate(isMetamodel=isMetamodel)).pack(side=tk.RIGHT, padx=20, pady=20)
 
     def create_results_widget(self, isMetamodel=False):
         self.clear_window()
@@ -730,13 +730,10 @@ class MainApp(tk.Tk):
 
         self.tree = self.create_table(table_frame, "name", "gen_time", "proc_time")
         self.populate_results_table(self.tree)
-        
-        self.back_button = tk.Button(self, text="BACK", command=self.create_simulation_widget, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
-                                     background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
-        self.back_button.pack(side=tk.LEFT, padx=20, pady=20)
-        self.next_button = tk.Button(self, text="MAIN MENU", command=self.start, foreground=MainApp.FOREGROUND_BUTTON_COLOR,
-                                     background=MainApp.BACKGROND_BUTTON_COLOR, relief='raised', font=MainApp.FONT_REGULAR)
-        self.next_button.pack(side=tk.RIGHT, padx=20, pady=20)
+
+        self.create_standard_button("BACK", lambda: self.create_simulation_widget(isMetamodel=isMetamodel)).pack(
+            side=tk.LEFT, padx=20, pady=20)
+        self.create_standard_button("MAIN MENU", self.start).pack(side=tk.RIGHT, padx=20, pady=20)
 
     def populate_results_table(self,table):
         for r in self.requests:
