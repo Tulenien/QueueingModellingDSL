@@ -721,6 +721,7 @@ class MainApp(tk.Tk):
 
             self.create_standard_button("BACK", self.processors_choice_widget).pack(side=tk.LEFT, padx=20, pady=20)
         self.create_standard_button("SIMULATE", lambda: self.simulate(isMetamodel=isMetamodel)).pack(side=tk.RIGHT, padx=20, pady=20)
+        self.create_standard_button("SIMULATE", lambda: self.simulate(isMetamodel=isMetamodel)).pack(side=tk.RIGHT, padx=20, pady=20)
 
     def create_results_widget(self, isMetamodel=False):
         self.clear_window()
@@ -730,9 +731,8 @@ class MainApp(tk.Tk):
 
         self.tree = self.create_table(table_frame, "name", "gen_time", "proc_time")
         self.populate_results_table(self.tree)
-
-        self.create_standard_button("BACK", lambda: self.create_simulation_widget(isMetamodel=isMetamodel)).pack(
-            side=tk.LEFT, padx=20, pady=20)
+        
+        self.create_standard_button("BACK", lambda: self.create_simulation_widget(isMetamodel=isMetamodel)).pack(side=tk.LEFT, padx=20, pady=20)
         self.create_standard_button("MAIN MENU", self.start).pack(side=tk.RIGHT, padx=20, pady=20)
 
     def populate_results_table(self,table):
