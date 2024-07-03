@@ -70,9 +70,6 @@ class MainApp(tk.Tk):
                 break
         return flag
 
-
-
-
     def check_int_parameters(self, user_input):
         if user_input.isdigit() or (user_input.startswith('-') and user_input[1:].isdigit()):
             return True
@@ -844,11 +841,6 @@ class MainApp(tk.Tk):
                 self.start()
         else:
             self.start()
-
-
-    def handle_file_path(self, file_path):
-        # Handle the file path as needed
-        print(f"File path selected: {file_path}")
 
     def info_box(self, text, title="Info"):
         # Implement the action for the 'Next' button
