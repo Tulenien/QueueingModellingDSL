@@ -721,7 +721,6 @@ class MainApp(tk.Tk):
 
             self.create_standard_button("BACK", self.processors_choice_widget).pack(side=tk.LEFT, padx=20, pady=20)
         self.create_standard_button("SIMULATE", lambda: self.simulate(isMetamodel=isMetamodel)).pack(side=tk.RIGHT, padx=20, pady=20)
-        self.create_standard_button("SIMULATE", lambda: self.simulate(isMetamodel=isMetamodel)).pack(side=tk.RIGHT, padx=20, pady=20)
 
     def create_results_widget(self, isMetamodel=False):
         self.clear_window()
