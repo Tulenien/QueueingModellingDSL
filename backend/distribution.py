@@ -1,9 +1,11 @@
 import random
+from inspect import signature
 
 class RandomGenerator():
     def __init__(self, func, args, distribution_name):
         self.generative_function = func
-        self.args = args
+        sing = signature(func)
+        self.args = args[:len(sing.parameters)]
         self.distribution = distribution_name
 
     def generate_double(self):
